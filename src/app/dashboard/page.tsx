@@ -1,81 +1,89 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import {
   Tag,
   Users,
-  MousePointerClick,
-  Trophy,
+  Database,
+  UserPlus,
+  FileEdit,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useDashboardLang } from "./DashboardLangContext"
 import { t } from "./translations"
+import { getDashboardStats, type DashboardStats } from "./actions/getStats"
 
-const activities = [
-  {
-    id: 1,
-    de: "Neuer Benutzer registriert: max_spieler92",
-    en: "New user registered: max_spieler92",
-    timestamp: { de: "vor 3 Minuten", en: "3 minutes ago" },
-  },
-  {
-    id: 2,
-    de: "Deal aktualisiert: Merkur Spiele — 100% bis 200€",
-    en: "Deal updated: Merkur Spiele — 100% up to €200",
-    timestamp: { de: "vor 18 Minuten", en: "18 minutes ago" },
-  },
-  {
-    id: 3,
-    de: "Bonushunt gestartet: Woche 47 — 15 Spiele, 500€ Budget",
-    en: "Bonus hunt started: Week 47 — 15 slots, €500 budget",
-    timestamp: { de: "vor 1 Stunde", en: "1 hour ago" },
-  },
-  {
-    id: 4,
-    de: "Klick auf Affiliate-Link: Betano (Nutzer: roberto_fan)",
-    en: "Affiliate link click: Betano (user: roberto_fan)",
-    timestamp: { de: "vor 2 Stunden", en: "2 hours ago" },
-  },
-  {
-    id: 5,
-    de: "Neuer Deal hinzugefügt: Tipico — Freispiele ohne Einzahlung",
-    en: "New deal added: Tipico — Free spins no deposit",
-    timestamp: { de: "vor 5 Stunden", en: "5 hours ago" },
-  },
-]
+function timeAgo(date: Date, lang: "de" | "en"): string {
+  const now = new Date()
+  const diffMs = now.getTime() - new Date(date).getTime()
+  const diffMin = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMin < 1) return lang === "de" ? "gerade eben" : "just now"
+  if (diffMin < 60) return lang === "de" ? `vor ${diffMin} Min.` : `${diffMin}m ago`
+  if (diffHours < 24) return lang === "de" ? `vor ${diffHours} Std.` : `${diffHours}h ago`
+  return lang === "de" ? `vor ${diffDays} Tagen` : `${diffDays}d ago`
+}
 
 export default function DashboardPage() {
   const { lang } = useDashboardLang()
+  const [data, setData] = useState<DashboardStats | null>(null)
+
+  useEffect(() => {
+    getDashboardStats().then(setData)
+  }, [])
 
   const stats = [
     {
       label: t.overview.activeDeals[lang],
-      value: "15",
+      value: data ? String(data.activeDeals) : "...",
       icon: Tag,
       iconBg: "bg-purple-500/10",
       iconText: "text-purple-400",
     },
     {
       label: t.overview.registrations[lang],
-      value: "127",
+      value: data ? String(data.totalUsers) : "...",
       icon: Users,
       iconBg: "bg-emerald-500/10",
       iconText: "text-emerald-400",
     },
     {
-      label: t.overview.totalClicks[lang],
-      value: "2.847",
-      icon: MousePointerClick,
+      label: lang === "de" ? "Deals gesamt" : "Total Deals",
+      value: data ? String(data.totalDeals) : "...",
+      icon: Database,
       iconBg: "bg-amber-500/10",
       iconText: "text-amber-400",
     },
-    {
-      label: t.overview.topReferrer[lang],
-      value: "Roberto",
-      icon: Trophy,
-      iconBg: "bg-blue-500/10",
-      iconText: "text-blue-400",
-    },
   ]
+
+  // Build activity feed from real data
+  const activities: { text: string; time: string; icon: typeof Tag }[] = []
+
+  if (data) {
+    for (const user of data.recentUsers) {
+      activities.push({
+        text: lang === "de"
+          ? `Neuer Benutzer registriert: ${user.name || user.email}`
+          : `New user registered: ${user.name || user.email}`,
+        time: timeAgo(user.createdAt, lang),
+        icon: UserPlus,
+      })
+    }
+    for (const deal of data.recentDeals) {
+      const isNew = deal.createdAt.getTime() === deal.updatedAt.getTime()
+      activities.push({
+        text: lang === "de"
+          ? `Deal ${isNew ? "erstellt" : "aktualisiert"}: ${deal.name}`
+          : `Deal ${isNew ? "created" : "updated"}: ${deal.name}`,
+        time: timeAgo(deal.updatedAt, lang),
+        icon: FileEdit,
+      })
+    }
+    // Sort by most recent
+    // Activities are already interleaved from DB queries sorted by date
+  }
 
   return (
     <div className="p-6 lg:p-8">
@@ -86,7 +94,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
@@ -120,19 +128,38 @@ export default function DashboardPage() {
         <h2 className="mb-4 text-base font-semibold text-white">
           {t.overview.recentActivity[lang]}
         </h2>
-        <ul className="space-y-2">
-          {activities.map((item) => (
-            <li
-              key={item.id}
-              className="flex items-center justify-between rounded-lg bg-white/5 px-4 py-4"
-            >
-              <p className="text-sm text-white/80">{item[lang]}</p>
-              <span className="ml-6 shrink-0 text-xs text-white/40">
-                {item.timestamp[lang]}
-              </span>
-            </li>
-          ))}
-        </ul>
+
+        {!data ? (
+          <div className="space-y-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-14 animate-pulse rounded-lg bg-white/5" />
+            ))}
+          </div>
+        ) : activities.length === 0 ? (
+          <div className="rounded-lg bg-white/5 px-4 py-8 text-center text-sm text-white/40">
+            {lang === "de" ? "Noch keine Aktivitäten vorhanden." : "No activity yet."}
+          </div>
+        ) : (
+          <ul className="space-y-2">
+            {activities.slice(0, 10).map((item, idx) => {
+              const Icon = item.icon
+              return (
+                <li
+                  key={idx}
+                  className="flex items-center justify-between rounded-lg bg-white/5 px-4 py-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className="h-4 w-4 shrink-0 text-purple-400" />
+                    <p className="text-sm text-white/80">{item.text}</p>
+                  </div>
+                  <span className="ml-6 shrink-0 text-xs text-white/40">
+                    {item.time}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
     </div>
   )
