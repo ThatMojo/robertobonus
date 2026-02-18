@@ -4,7 +4,7 @@ import { SITE_NAME, SOCIAL_LINKS, STREAMER_NAME } from "@/lib/constants"
 
 const footerLinks = {
   casino: [
-    { label: "Bonus Vergleich", href: "/" },
+    { label: "Bonus Comparison", href: "/" },
     { label: "Merkur Casinos", href: "/merkur-casinos" },
     { label: "Bonushunts", href: "/bonushunts" },
   ],
@@ -14,9 +14,9 @@ const footerLinks = {
     { label: "Login", href: "/login" },
   ],
   legal: [
-    { label: "Impressum", href: "/impressum" },
-    { label: "Datenschutz", href: "/datenschutz" },
-    { label: "AGB", href: "/agb" },
+    { label: "Legal Notice", href: "/impressum" },
+    { label: "Privacy Policy", href: "/datenschutz" },
+    { label: "Terms", href: "/agb" },
   ],
 }
 
@@ -42,7 +42,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm text-white/40 mb-4 max-w-xs">
-              Die besten Casino Bonusangebote, kuratiert von {STREAMER_NAME}. Finde exklusive Deals mit den besten Konditionen.
+              The best casino bonus deals, curated by {STREAMER_NAME}. Find exclusive deals with the best conditions.
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
@@ -90,7 +90,7 @@ export default function Footer() {
 
           {/* Legal Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white/80 mb-3">Rechtliches</h3>
+            <h3 className="text-sm font-semibold text-white/80 mb-3">Legal</h3>
             <ul className="space-y-2">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
@@ -106,7 +106,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/30">
-            &copy; {new Date().getFullYear()} {SITE_NAME}. Alle Rechte vorbehalten.
+            &copy; {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
           </p>
           <p className="text-xs text-white/20 flex items-center gap-1">
             Made with <Heart className="h-3 w-3 text-purple-500" /> by {STREAMER_NAME}
@@ -116,7 +116,7 @@ export default function Footer() {
         {/* Responsible gambling disclaimer */}
         <div className="mt-6 rounded-xl border border-white/5 bg-white/[0.02] p-4">
           <p className="text-xs text-white/25 text-center leading-relaxed">
-            18+ | Glücksspiel kann süchtig machen. Bitte spiele verantwortungsvoll. Hilfe findest du bei der BZgA unter 0800 1 37 27 00 (kostenlos). Alle genannten Bonusangebote unterliegen den jeweiligen AGB der Anbieter.
+            18+ | Gambling can be addictive. Please gamble responsibly. For help visit www.begambleaware.org.
           </p>
         </div>
       </div>

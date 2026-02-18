@@ -7,7 +7,7 @@ import MerkurInfoSection from "@/components/sections/MerkurInfoSection"
 import FAQSection from "@/components/sections/FAQSection"
 
 export const metadata = {
-  title: `${SITE_NAME} | Die besten Casino Bonusangebote`,
+  title: `${SITE_NAME} | The Best Casino Bonus Offers`,
   description: SITE_DESCRIPTION,
   alternates: {
     canonical: SITE_URL,

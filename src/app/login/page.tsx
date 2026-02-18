@@ -3,8 +3,8 @@ import LoginForm from "./LoginForm"
 import { SITE_NAME } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Anmelden",
-  description: `Melde dich bei ${SITE_NAME} an, um exklusive Casino Bonus Deals zu entdecken.`,
+  title: "Login",
+  description: `Sign in to ${SITE_NAME} to discover exclusive casino bonus deals.`,
 }
 
 export default function LoginPage() {

@@ -119,7 +119,7 @@ function PodiumCard({
           <span className="text-purple-300 font-semibold text-lg">
             {formatNumber(user.points)}
           </span>
-          <span className="text-gray-500 text-sm">Punkte</span>
+          <span className="text-gray-500 text-sm">Points</span>
         </div>
 
         {/* Wins */}
@@ -150,7 +150,7 @@ export default function LeaderboardContent() {
           <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4">
             <Trophy className="w-4 h-4 text-purple-400" />
             <span className="text-sm text-purple-300 font-medium">
-              Rangliste
+              Rankings
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
@@ -159,8 +159,8 @@ export default function LeaderboardContent() {
             </span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Die aktivsten Mitglieder unserer Community. Sammle Punkte, gewinne
-            Challenges und sichere dir einen Platz auf dem Podium.
+            The most active members of our community. Earn points, win
+            challenges, and secure your spot on the podium.
           </p>
         </AnimatedSection>
 
@@ -179,7 +179,7 @@ export default function LeaderboardContent() {
             <div className="flex items-center gap-2 mb-6">
               <TrendingUp className="w-5 h-5 text-purple-400" />
               <h2 className="text-lg sm:text-xl font-bold text-white">
-                Komplette Rangliste
+                Full Rankings
               </h2>
             </div>
 
@@ -187,19 +187,19 @@ export default function LeaderboardContent() {
               <TableHeader>
                 <TableRow className="border-white/10 hover:bg-transparent">
                   <TableHead className="text-purple-300 font-semibold">
-                    Rang
+                    Rank
                   </TableHead>
                   <TableHead className="text-purple-300 font-semibold">
                     Name
                   </TableHead>
                   <TableHead className="text-purple-300 font-semibold text-right">
-                    Punkte
+                    Points
                   </TableHead>
                   <TableHead className="text-purple-300 font-semibold text-right">
                     Wins
                   </TableHead>
                   <TableHead className="text-purple-300 font-semibold text-right hidden sm:table-cell">
-                    Dabei seit
+                    Member Since
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -287,9 +287,8 @@ export default function LeaderboardContent() {
         {/* Bottom note */}
         <AnimatedSection delay={0.4}>
           <p className="mt-8 text-center text-sm text-gray-500">
-            Die Rangliste wird regelm&auml;&szlig;ig aktualisiert. Punkte
-            werden durch aktive Teilnahme an Community-Events und Challenges
-            vergeben.
+            The leaderboard is updated regularly. Points are awarded through
+            active participation in community events and challenges.
           </p>
         </AnimatedSection>
       </div>

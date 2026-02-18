@@ -13,8 +13,8 @@ export const mainNavItems: NavItem[] = [
     href: "#deals",
     icon: Coins,
     children: [
-      { label: "Bonus Vergleich", href: "/", description: "Die besten Bonusangebote" },
-      { label: "Merkur Casinos", href: "/merkur-casinos", description: "Merkur Slots online spielen" },
+      { label: "Bonus Comparison", href: "/", description: "The best bonus deals" },
+      { label: "Merkur Casinos", href: "/merkur-casinos", description: "Play Merkur slots online" },
     ],
   },
   {
@@ -22,8 +22,8 @@ export const mainNavItems: NavItem[] = [
     href: "#community",
     icon: Sparkles,
     children: [
-      { label: "Leaderboard", href: "/leaderboard", description: "Top Spieler Rangliste" },
-      { label: "Support", href: "/support", description: "Hilfe & Kontakt" },
+      { label: "Leaderboard", href: "/leaderboard", description: "Top player rankings" },
+      { label: "Support", href: "/support", description: "Help & Contact" },
     ],
   },
   { label: "Bonushunts", href: "/bonushunts", icon: Flag },

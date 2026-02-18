@@ -52,7 +52,7 @@ export default function DealCard({ deal }: DealCardProps) {
             </h3>
             {deal.freeSpins && (
               <span className="mt-1 inline-block rounded-lg bg-purple-500/15 px-2.5 py-1 text-xs font-semibold text-purple-300">
-                +{deal.freeSpins} Freispiele
+                +{deal.freeSpins} Free Spins
               </span>
             )}
           </div>
@@ -82,7 +82,7 @@ export default function DealCard({ deal }: DealCardProps) {
 
           {/* Max Bonus */}
           <li className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
-            <span className="block text-xs text-white/60">Max. Bonus</span>
+            <span className="block text-xs text-white/60">Max Bonus</span>
             <span className="mt-0.5 block text-lg font-semibold">
               {deal.maxBonus.toLocaleString("de-DE")}&euro;
             </span>
@@ -90,7 +90,7 @@ export default function DealCard({ deal }: DealCardProps) {
 
           {/* Max Einsatz */}
           <li className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
-            <span className="block text-xs text-white/60">Max. Einsatz</span>
+            <span className="block text-xs text-white/60">Max Bet</span>
             <span className="mt-0.5 block text-lg font-semibold">
               {deal.maxBet}&euro;
             </span>
@@ -100,12 +100,12 @@ export default function DealCard({ deal }: DealCardProps) {
           <li className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
             <span className="block text-xs text-white/60">Wager</span>
             <span className="mt-0.5 block text-lg font-semibold">
-              {deal.wagerMultiplier}x ({deal.wagerType === "Nur Bonus" ? "B" : "B+D"})
+              {deal.wagerMultiplier}x ({deal.wagerType === "Bonus Only" ? "B" : "B+D"})
             </span>
           </li>
         </ul>
 
-        {/* Right: Features + Promocode */}
+        {/* Right: Features + Promo Code */}
         <div className="flex flex-col gap-3 md:col-span-5">
           {/* Feature tags */}
           <ul className="flex flex-wrap gap-2">
@@ -123,7 +123,7 @@ export default function DealCard({ deal }: DealCardProps) {
           <div className="flex items-center justify-between gap-3 rounded-xl border border-purple-400/30 bg-purple-400/10 px-3 py-2 ring-1 ring-white/5">
             <div className="min-w-0">
               <p className="text-[10px] font-medium uppercase tracking-wider text-purple-400">
-                Promocode
+                Promo Code
               </p>
               <p className="truncate font-bold text-zinc-400">
                 {deal.promoCode ? (
@@ -131,7 +131,7 @@ export default function DealCard({ deal }: DealCardProps) {
                     {deal.promoCode}
                   </span>
                 ) : (
-                  "Kein Code benötigt"
+                  "No Code Required"
                 )}
               </p>
             </div>
@@ -139,7 +139,7 @@ export default function DealCard({ deal }: DealCardProps) {
               <button
                 onClick={() => navigator.clipboard.writeText(deal.promoCode!)}
                 className="shrink-0 rounded-lg bg-white/5 p-1.5 text-white/40 transition-colors hover:bg-white/10 hover:text-white"
-                title="Code kopieren"
+                title="Copy Code"
               >
                 <svg
                   className="h-4 w-4"
@@ -160,7 +160,7 @@ export default function DealCard({ deal }: DealCardProps) {
       {/* FOOTER: Verification + CTA */}
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="text-center text-sm text-white/60 sm:text-left">
-          Verifiziert von Roberto | T&amp;Cs Apply
+          Verified by Roberto | T&amp;Cs Apply
         </div>
 
         <div className="flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
@@ -187,7 +187,7 @@ export default function DealCard({ deal }: DealCardProps) {
             aria-label={`Zum Deal – ${deal.name}`}
           >
             <span className="relative z-10 flex items-center gap-2 text-black transition-transform duration-300 group-hover/btn:scale-[1.03]">
-              Jetzt Spielen
+              Play Now
             </span>
             <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl opacity-0 transition-opacity duration-700 group-hover/btn:opacity-100">
               <span className="absolute top-0 -left-full h-full w-[40%] skew-x-12 animate-[shine_1.2s_ease-in-out] bg-gradient-to-r from-transparent via-white/40 to-transparent" />

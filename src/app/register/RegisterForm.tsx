@@ -30,12 +30,12 @@ export default function RegisterForm() {
     setError("")
 
     if (password !== confirmPassword) {
-      setError("Die Passwoerter stimmen nicht ueberein.")
+      setError("Passwords do not match.")
       return
     }
 
     if (password.length < 8) {
-      setError("Das Passwort muss mindestens 8 Zeichen lang sein.")
+      setError("Password must be at least 8 characters long.")
       return
     }
 
@@ -51,7 +51,7 @@ export default function RegisterForm() {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || "Ein Fehler ist aufgetreten.")
+        setError(data.error || "An error occurred.")
         return
       }
 
@@ -70,7 +70,7 @@ export default function RegisterForm() {
         router.refresh()
       }
     } catch {
-      setError("Ein Fehler ist aufgetreten. Bitte versuche es erneut.")
+      setError("An error occurred. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -103,7 +103,7 @@ export default function RegisterForm() {
                 {SITE_NAME}
               </m.h1>
               <p className="text-sm text-white/50 mt-2">
-                Erstelle dein Konto
+                Create your account
               </p>
             </div>
 
@@ -123,12 +123,12 @@ export default function RegisterForm() {
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-white/70">
                   <User className="size-4" />
-                  Name
+                  Username
                 </Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Dein Name"
+                  placeholder="Your username"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -139,12 +139,12 @@ export default function RegisterForm() {
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-white/70">
                   <Mail className="size-4" />
-                  E-Mail
+                  Email
                 </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="deine@email.de"
+                  placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -155,12 +155,12 @@ export default function RegisterForm() {
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-white/70">
                   <Lock className="size-4" />
-                  Passwort
+                  Password
                 </Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Mindestens 8 Zeichen"
+                  placeholder="At least 8 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -172,12 +172,12 @@ export default function RegisterForm() {
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword" className="text-white/70">
                   <Lock className="size-4" />
-                  Passwort bestaetigen
+                  Confirm Password
                 </Label>
                 <Input
                   id="confirmPassword"
                   type="password"
-                  placeholder="Passwort wiederholen"
+                  placeholder="Repeat your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
@@ -189,18 +189,18 @@ export default function RegisterForm() {
               <div className="space-y-2">
                 <Label htmlFor="referralCode" className="text-white/70">
                   <Gift className="size-4" />
-                  Empfehlungscode
+                  Referral Code
                 </Label>
                 <Input
                   id="referralCode"
                   type="text"
-                  placeholder="Optional: Code deines Werbers"
+                  placeholder="Optional: your referrer's code"
                   value={referralCode}
                   onChange={(e) => setReferralCode(e.target.value)}
                   className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus-visible:border-purple-500/50 focus-visible:ring-purple-500/20"
                 />
                 <p className="text-xs text-white/30">
-                  Optional: Code deines Werbers
+                  Optional: your referrer&apos;s code
                 </p>
               </div>
 
@@ -214,7 +214,7 @@ export default function RegisterForm() {
                   "disabled:opacity-50 disabled:cursor-not-allowed"
                 )}
               >
-                {loading ? "Wird registriert..." : "Registrieren"}
+                {loading ? "Registering..." : "Register"}
               </Button>
             </form>
 
@@ -222,7 +222,7 @@ export default function RegisterForm() {
             <div className="relative my-6 flex items-center gap-4">
               <Separator className="flex-1 bg-white/10" />
               <span className="text-xs text-white/40 uppercase tracking-wider">
-                oder
+                or
               </span>
               <Separator className="flex-1 bg-white/10" />
             </div>
@@ -236,7 +236,7 @@ export default function RegisterForm() {
                 className="w-full h-11 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
               >
                 <Chrome className="size-5" />
-                Mit Google registrieren
+                Sign up with Google
               </Button>
 
               <Button
@@ -246,7 +246,7 @@ export default function RegisterForm() {
                 className="w-full h-11 border-white/10 bg-white/5 text-white hover:bg-[#5865F2]/20 hover:border-[#5865F2]/30 hover:text-white"
               >
                 <MessageCircle className="size-5" />
-                Mit Discord registrieren
+                Sign up with Discord
               </Button>
 
               <Button
@@ -256,18 +256,18 @@ export default function RegisterForm() {
                 className="w-full h-11 border-white/10 bg-white/5 text-white hover:bg-[#9146FF]/20 hover:border-[#9146FF]/30 hover:text-white"
               >
                 <Tv className="size-5" />
-                Mit Twitch registrieren
+                Sign up with Twitch
               </Button>
             </div>
 
             {/* Login Link */}
             <p className="mt-8 text-center text-sm text-white/50">
-              Bereits ein Konto?{" "}
+              Already have an account?{" "}
               <Link
                 href="/login"
                 className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
               >
-                Anmelden
+                Sign In
               </Link>
             </p>
           </GlassCard>

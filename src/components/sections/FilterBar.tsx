@@ -56,11 +56,11 @@ export default function FilterBar({
         {/* Bonus Type */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-white/50">
-            Bonus Typ
+            Bonus Type
           </label>
           <div className="flex gap-1.5">
             {[
-              { label: "Alle", value: "alle" },
+              { label: "All", value: "alle" },
               { label: "Non-Sticky", value: "non-sticky" },
               { label: "Sticky", value: "sticky" },
             ].map((opt) => (
@@ -74,10 +74,10 @@ export default function FilterBar({
           </div>
         </div>
 
-        {/* Freispiele Toggle */}
+        {/* Free Spins Toggle */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-white/50">
-            Freispiele
+            Free Spins
           </label>
           <button
             type="button"
@@ -102,7 +102,7 @@ export default function FilterBar({
                 freeSpinsOnly ? "text-purple-300" : "text-white/50"
               }`}
             >
-              Nur mit Freispielen
+              With Free Spins only
             </span>
           </button>
         </div>
@@ -110,11 +110,11 @@ export default function FilterBar({
         {/* Provider */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-white/50">
-            Spiele-Hersteller
+            Game Providers
           </label>
           <div className="flex gap-1.5">
             {[
-              { label: "Alle", value: "alle" },
+              { label: "All", value: "alle" },
               { label: "Merkur", value: "merkur" },
               { label: "Novoline", value: "novoline" },
             ].map((opt) => (
@@ -131,7 +131,7 @@ export default function FilterBar({
         {/* Min Bonus Slider */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-white/50">
-            Min. Bonus
+            Min Bonus
           </label>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">

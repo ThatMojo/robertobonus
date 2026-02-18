@@ -3,12 +3,12 @@ import AnimatedSection from "@/components/shared/AnimatedSection"
 import GlassCard from "@/components/shared/GlassCard"
 
 const features = [
-  "Original Merkur & Novoline Spielautomaten",
-  "Eye of Horus, Book of Ra, El Torero & mehr",
-  "Lizenzierte Casinos mit deutschen Anbietern",
-  "Faire Auszahlungsquoten (RTP) wie in der Spielhalle",
-  "Verfügbar auf Desktop und Mobilgeräten",
-  "Exklusive Boni für Merkur & Novoline Casinos",
+  "Original Merkur & Novoline slot machines",
+  "Eye of Horus, Book of Ra, El Torero & more",
+  "Licensed casinos with German providers",
+  "Fair payout rates (RTP) as in arcades",
+  "Available on desktop and mobile devices",
+  "Exclusive bonuses for Merkur & Novoline casinos",
 ]
 
 export default function MerkurInfoSection() {
@@ -44,24 +44,22 @@ export default function MerkurInfoSection() {
             <AnimatedSection delay={0.2}>
               <div className="space-y-4 text-gray-400 leading-relaxed mb-8">
                 <p>
-                  Die beliebten Merkur- und Novoline-Spielautomaten sind
-                  zur&uuml;ck in der Online-Welt. Nach einer l&auml;ngeren Pause
-                  bieten ausgew&auml;hlte lizenzierte Online Casinos nun wieder
-                  die Klassiker an, die Millionen von Spielern aus den
-                  Spielhallen kennen und lieben.
+                  The popular Merkur and Novoline slot machines are back in the
+                  online world. After a longer break, selected licensed online
+                  casinos now offer the classics again that millions of players
+                  know and love from arcades.
                 </p>
                 <p>
-                  Ob Eye of Horus, El Torero und Blazing Star von Merkur oder
-                  Book of Ra, Sizzling Hot und Lucky Lady&apos;s Charm von
-                  Novoline, die Originaltitel sind jetzt bequem von zu
-                  Hause oder unterwegs spielbar, mit den gleichen fairen
-                  Auszahlungsquoten.
+                  Whether Eye of Horus, El Torero and Blazing Star from Merkur
+                  or Book of Ra, Sizzling Hot and Lucky Lady&apos;s Charm from
+                  Novoline, the original titles are now playable conveniently
+                  from home or on the go, with the same fair payout rates.
                 </p>
                 <p>
-                  Wir haben die besten Online Casinos mit Merkur- und
-                  Novoline-Slots f&uuml;r dich getestet und die attraktivsten
-                  Bonusangebote zusammengestellt. So findest du schnell ein
-                  seri&ouml;ses Casino mit deinen Lieblingsspielen.
+                  We have tested the best online casinos with Merkur and
+                  Novoline slots for you and compiled the most attractive bonus
+                  offers. This way you can quickly find a reputable casino with
+                  your favourite games.
                 </p>
               </div>
             </AnimatedSection>
@@ -84,7 +82,7 @@ export default function MerkurInfoSection() {
                 href="#deals"
                 className="group inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold px-7 py-3.5 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all duration-300 hover:scale-[1.02]"
               >
-                Merkur Casinos ansehen
+                View Merkur Casinos
               </a>
             </AnimatedSection>
           </div>
@@ -99,10 +97,10 @@ export default function MerkurInfoSection() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">
-                    Beliebte Slots
+                    Popular Slots
                   </h3>
                   <p className="text-sm text-gray-400">
-                    Klassiker jetzt online
+                    Classics now online
                   </p>
                 </div>
               </div>
@@ -162,8 +160,8 @@ export default function MerkurInfoSection() {
 
               {/* Footer note */}
               <p className="mt-6 text-xs text-gray-500 text-center">
-                RTP-Werte basieren auf Herstellerangaben. Tatsächliche
-                Auszahlungen können variieren.
+                RTP values are based on manufacturer specifications. Actual
+                payouts may vary.
               </p>
             </GlassCard>
           </AnimatedSection>

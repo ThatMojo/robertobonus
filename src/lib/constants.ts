@@ -1,6 +1,6 @@
 export const SITE_NAME = "Robertobonus"
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://robertobonus.com"
-export const SITE_DESCRIPTION = "Finde die besten Casino Bonusangebote: großzügige Einzahlungsboni, Freispiele & faire Bedingungen."
+export const SITE_DESCRIPTION = "Find the best casino bonus offers: generous deposit bonuses, free spins & fair terms."
 
 export const SOCIAL_LINKS = {
   twitch: "https://www.twitch.tv/robertovstheworld",

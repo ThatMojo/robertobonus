@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { signIn, useSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { LazyMotion, domAnimation, m } from "framer-motion"
@@ -35,7 +35,7 @@ export default function LoginForm() {
       })
 
       if (result?.error) {
-        setError("Ungueltige Anmeldedaten. Bitte versuche es erneut.")
+        setError("Invalid credentials. Please try again.")
       } else {
         // Fetch session to check role, then redirect
         const res = await fetch("/api/auth/session")
@@ -48,7 +48,7 @@ export default function LoginForm() {
         router.refresh()
       }
     } catch {
-      setError("Ein Fehler ist aufgetreten. Bitte versuche es erneut.")
+      setError("An error occurred. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -81,7 +81,7 @@ export default function LoginForm() {
                 {SITE_NAME}
               </m.h1>
               <p className="text-sm text-white/50 mt-2">
-                Melde dich an, um fortzufahren
+                Sign in to continue
               </p>
             </div>
 
@@ -101,12 +101,12 @@ export default function LoginForm() {
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-white/70">
                   <Mail className="size-4" />
-                  E-Mail
+                  Email
                 </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="deine@email.de"
+                  placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -117,12 +117,12 @@ export default function LoginForm() {
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-white/70">
                   <Lock className="size-4" />
-                  Passwort
+                  Password
                 </Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Dein Passwort"
+                  placeholder="Your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -140,7 +140,7 @@ export default function LoginForm() {
                   "disabled:opacity-50 disabled:cursor-not-allowed"
                 )}
               >
-                {loading ? "Wird angemeldet..." : "Anmelden"}
+                {loading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
 
@@ -148,7 +148,7 @@ export default function LoginForm() {
             <div className="relative my-6 flex items-center gap-4">
               <Separator className="flex-1 bg-white/10" />
               <span className="text-xs text-white/40 uppercase tracking-wider">
-                oder
+                or
               </span>
               <Separator className="flex-1 bg-white/10" />
             </div>
@@ -162,7 +162,7 @@ export default function LoginForm() {
                 className="w-full h-11 border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
               >
                 <Chrome className="size-5" />
-                Mit Google anmelden
+                Sign in with Google
               </Button>
 
               <Button
@@ -172,7 +172,7 @@ export default function LoginForm() {
                 className="w-full h-11 border-white/10 bg-white/5 text-white hover:bg-[#5865F2]/20 hover:border-[#5865F2]/30 hover:text-white"
               >
                 <MessageCircle className="size-5" />
-                Mit Discord anmelden
+                Sign in with Discord
               </Button>
 
               <Button
@@ -182,18 +182,18 @@ export default function LoginForm() {
                 className="w-full h-11 border-white/10 bg-white/5 text-white hover:bg-[#9146FF]/20 hover:border-[#9146FF]/30 hover:text-white"
               >
                 <Tv className="size-5" />
-                Mit Twitch anmelden
+                Sign in with Twitch
               </Button>
             </div>
 
             {/* Register Link */}
             <p className="mt-8 text-center text-sm text-white/50">
-              Noch kein Konto?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="/register"
                 className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
               >
-                Registrieren
+                Register
               </Link>
             </p>
           </GlassCard>

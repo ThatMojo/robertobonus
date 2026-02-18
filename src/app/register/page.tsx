@@ -3,8 +3,8 @@ import RegisterForm from "./RegisterForm"
 import { SITE_NAME } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Registrieren",
-  description: `Erstelle ein Konto bei ${SITE_NAME} und werde Teil der Community.`,
+  title: "Register",
+  description: `Create an account at ${SITE_NAME} and become part of the community.`,
 }
 
 export default function RegisterPage() {

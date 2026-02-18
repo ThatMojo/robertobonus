@@ -18,13 +18,13 @@ const stats = [
   },
   {
     key: "comments" as const,
-    label: "Kommentare",
+    label: "Comments",
     icon: MessageSquare,
     value: communityStats.comments,
   },
   {
     key: "totalPoints" as const,
-    label: "Punkte",
+    label: "Points",
     icon: Star,
     value: communityStats.totalPoints,
   },
@@ -51,12 +51,12 @@ export default function CommunityStats() {
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
             <span className="bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 bg-clip-text text-transparent">
-              Unsere Community
+              Our Community
             </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Werde Teil unserer wachsenden Community und teile deine Gewinne,
-            Erfahrungen und Strategien mit anderen Spielern.
+            Join our growing community and share your wins, experiences and
+            strategies with other players.
           </p>
         </AnimatedSection>
 

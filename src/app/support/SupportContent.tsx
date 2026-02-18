@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label"
 const contactChannels = [
   {
     name: "Twitch",
-    description: `Live-Chat auf dem ${STREAMER_NAME} Kanal`,
+    description: `Live chat on the ${STREAMER_NAME} channel`,
     href: SOCIAL_LINKS.twitch,
     icon: Twitch,
     color: "text-purple-400 hover:text-purple-300",
@@ -34,7 +34,7 @@ const contactChannels = [
   },
   {
     name: "YouTube",
-    description: "Kommentare und Community-Beitr\u00e4ge",
+    description: "Comments and community posts",
     href: SOCIAL_LINKS.youtube,
     icon: Youtube,
     color: "text-red-400 hover:text-red-300",
@@ -42,7 +42,7 @@ const contactChannels = [
   },
   {
     name: "Instagram",
-    description: "Direktnachricht via Instagram",
+    description: "Direct message via Instagram",
     href: SOCIAL_LINKS.instagram,
     icon: Instagram,
     color: "text-pink-400 hover:text-pink-300",
@@ -62,17 +62,17 @@ export default function SupportContent() {
           <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4">
             <HelpCircle className="w-4 h-4 text-purple-400" />
             <span className="text-sm text-purple-300 font-medium">
-              Hilfe & Support
+              Help &amp; Support
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
             <span className="bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 bg-clip-text text-transparent">
-              Support &amp; Hilfe
+              Support &amp; Help
             </span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Finde Antworten auf h&auml;ufige Fragen oder nimm direkt Kontakt
-            mit uns auf. Wir helfen dir gerne weiter.
+            Find answers to common questions or get in touch with us directly.
+            We are happy to help.
           </p>
         </AnimatedSection>
 
@@ -84,7 +84,7 @@ export default function SupportContent() {
               <div className="flex items-center gap-2 mb-6">
                 <MessageCircle className="w-5 h-5 text-purple-400" />
                 <h2 className="text-lg sm:text-xl font-bold text-white">
-                  H&auml;ufig gestellte Fragen
+                  Frequently Asked Questions
                 </h2>
               </div>
 
@@ -115,11 +115,11 @@ export default function SupportContent() {
                 <div className="flex items-center gap-2 mb-2">
                   <Send className="w-5 h-5 text-purple-400" />
                   <h2 className="text-lg sm:text-xl font-bold text-white">
-                    Kontakt
+                    Contact
                   </h2>
                 </div>
                 <p className="text-gray-400 text-sm mb-6">
-                  Du hast eine Frage oder brauchst Hilfe? Schreib uns!
+                  Have a question or need help? Write to us!
                 </p>
 
                 <div className="space-y-3">
@@ -154,7 +154,7 @@ export default function SupportContent() {
             <AnimatedSection delay={0.35}>
               <GlassCard className="p-6 sm:p-8">
                 <h3 className="text-base sm:text-lg font-bold text-white mb-4">
-                  Nachricht senden
+                  Send a Message
                 </h3>
                 <form
                   onSubmit={(e) => e.preventDefault()}
@@ -170,7 +170,7 @@ export default function SupportContent() {
                     <Input
                       id="name"
                       type="text"
-                      placeholder="Dein Name"
+                      placeholder="Your name"
                       className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus-visible:border-purple-500 focus-visible:ring-purple-500/20"
                     />
                   </div>
@@ -180,12 +180,12 @@ export default function SupportContent() {
                       htmlFor="email"
                       className="text-gray-300 text-sm"
                     >
-                      E-Mail
+                      Email
                     </Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder="deine@email.de"
+                      placeholder="your@email.com"
                       className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus-visible:border-purple-500 focus-visible:ring-purple-500/20"
                     />
                   </div>
@@ -195,11 +195,11 @@ export default function SupportContent() {
                       htmlFor="message"
                       className="text-gray-300 text-sm"
                     >
-                      Nachricht
+                      Message
                     </Label>
                     <Textarea
                       id="message"
-                      placeholder="Wie können wir dir helfen?"
+                      placeholder="How can we help you?"
                       rows={4}
                       className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus-visible:border-purple-500 focus-visible:ring-purple-500/20 min-h-[100px]"
                     />
@@ -210,7 +210,7 @@ export default function SupportContent() {
                     className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold"
                   >
                     <Send className="w-4 h-4" />
-                    Nachricht senden
+                    Send Message
                   </Button>
                 </form>
               </GlassCard>
@@ -221,15 +221,15 @@ export default function SupportContent() {
         {/* Bottom note */}
         <AnimatedSection delay={0.45}>
           <p className="mt-10 text-center text-sm text-gray-500">
-            Wir antworten in der Regel innerhalb von 24 Stunden. F&uuml;r
-            schnelle Hilfe empfehlen wir den{" "}
+            We typically respond within 24 hours. For quick help, we recommend
+            the{" "}
             <a
               href={SOCIAL_LINKS.twitch}
               target="_blank"
               rel="noopener noreferrer"
               className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
             >
-              Twitch Live-Chat
+              Twitch Live Chat
             </a>
             .
           </p>

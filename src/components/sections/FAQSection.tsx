@@ -24,12 +24,12 @@ export default function FAQSection() {
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
             <span className="bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 bg-clip-text text-transparent">
-              H&auml;ufig gestellte Fragen
+              Frequently Asked Questions
             </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Die wichtigsten Fragen rund um Casino Boni, Umsatzbedingungen und
-            sichere Online Casinos &ndash; verst&auml;ndlich erkl&auml;rt.
+            The most important questions about casino bonuses, wagering
+            requirements and safe online casinos &ndash; explained clearly.
           </p>
         </AnimatedSection>
 
@@ -58,14 +58,14 @@ export default function FAQSection() {
         {/* Bottom note */}
         <AnimatedSection delay={0.3}>
           <p className="mt-8 text-center text-sm text-gray-500">
-            Weitere Fragen? Schreib uns im{" "}
+            More questions? Write to us in the{" "}
             <a
               href="#"
               className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
             >
-              Community-Chat
+              community chat
             </a>{" "}
-            oder auf{" "}
+            or on{" "}
             <a
               href="https://www.twitch.tv/robertovstheworld"
               target="_blank"

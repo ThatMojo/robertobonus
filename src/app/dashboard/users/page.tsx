@@ -11,6 +11,8 @@ import {
   Edit2,
   ShieldCheck,
 } from "lucide-react"
+import { useDashboardLang } from "../DashboardLangContext"
+import { t } from "../translations"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Table,
@@ -195,6 +197,7 @@ function StatCard({
 // ─────────────────────────────────────────────
 
 export default function UsersPage() {
+  const { lang } = useDashboardLang()
   const [search, setSearch] = useState("")
 
   const filtered = useMemo(() => {
@@ -225,10 +228,10 @@ export default function UsersPage() {
           </div>
           <div>
             <h1 className="text-xl font-semibold text-white">
-              Benutzer verwalten
+              {t.users.title[lang]}
             </h1>
             <p className="text-sm text-white/40">
-              {mockUsers.length} Benutzer gesamt
+              {mockUsers.length} {t.users.totalUsers[lang]}
             </p>
           </div>
         </div>
@@ -242,13 +245,13 @@ export default function UsersPage() {
               value="users"
               className="h-7 px-4 text-sm text-white/50 data-[state=active]:bg-purple-500/15 data-[state=active]:text-purple-400 data-[state=active]:shadow-none"
             >
-              Alle Benutzer
+              {t.users.allUsers[lang]}
             </TabsTrigger>
             <TabsTrigger
               value="referrals"
               className="h-7 px-4 text-sm text-white/50 data-[state=active]:bg-purple-500/15 data-[state=active]:text-purple-400 data-[state=active]:shadow-none"
             >
-              Referrals
+              {t.users.referrals[lang]}
             </TabsTrigger>
           </TabsList>
 
@@ -256,7 +259,7 @@ export default function UsersPage() {
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
             <Input
-              placeholder="Name oder E-Mail suchen..."
+              placeholder={t.users.searchPlaceholder[lang]}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="h-9 border-white/10 bg-white/[0.03] pl-9 text-sm text-white placeholder:text-white/30 focus:border-purple-500/50 focus:ring-0"
@@ -271,25 +274,25 @@ export default function UsersPage() {
               <TableHeader>
                 <TableRow className="border-white/10 hover:bg-transparent">
                   <TableHead className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-white/40">
-                    Benutzer
+                    {t.users.user[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-white/40">
-                    Rolle
+                    {t.users.role[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-white/40">
-                    Punkte
+                    {t.users.points[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-white/40">
-                    Referral Code
+                    {t.users.referralCode[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-white/40">
-                    Referrals
+                    {t.users.referrals[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-white/40">
-                    Beigetreten
+                    {t.users.joinedAt[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-white/40">
-                    Aktionen
+                    {t.users.roleAction[lang]}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -300,7 +303,7 @@ export default function UsersPage() {
                       colSpan={7}
                       className="px-4 py-12 text-center text-sm text-white/30"
                     >
-                      Keine Benutzer gefunden.
+                      {t.users.noUsersFound[lang]}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -354,7 +357,7 @@ export default function UsersPage() {
                             className="h-7 gap-1.5 border border-white/10 bg-white/[0.03] px-2.5 text-xs text-white/60 hover:border-purple-500/30 hover:bg-purple-500/10 hover:text-purple-400"
                           >
                             <ShieldCheck className="h-3 w-3" />
-                            Rolle
+                            {t.users.roleAction[lang]}
                             <ChevronDown className="h-3 w-3" />
                           </Button>
                           <Button
@@ -362,7 +365,7 @@ export default function UsersPage() {
                             className="h-7 gap-1.5 border border-white/10 bg-white/[0.03] px-2.5 text-xs text-white/60 hover:border-purple-500/30 hover:bg-purple-500/10 hover:text-purple-400"
                           >
                             <Edit2 className="h-3 w-3" />
-                            Punkte
+                            {t.users.pointsAction[lang]}
                           </Button>
                         </div>
                       </TableCell>
@@ -375,7 +378,7 @@ export default function UsersPage() {
 
           {filtered.length > 0 && (
             <p className="mt-3 text-right text-xs text-white/30">
-              {filtered.length} von {mockUsers.length} Benutzern
+              {filtered.length} {t.users.countOf[lang]} {mockUsers.length} {t.users.usersLabel[lang]}
             </p>
           )}
         </TabsContent>
@@ -386,21 +389,21 @@ export default function UsersPage() {
           <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <StatCard
               icon={GitBranch}
-              label="Gesamt Referrals"
+              label={t.users.totalReferrals[lang]}
               value={totalReferrals}
-              sub="Über alle Benutzer"
+              sub={t.users.acrossAllUsers[lang]}
             />
             <StatCard
               icon={Trophy}
-              label="Top Referrer"
+              label={t.users.topReferrers[lang]}
               value={topReferrer.name}
-              sub={`${topReferrer.referrals} Referrals`}
+              sub={`${topReferrer.referrals} ${t.users.referrals[lang]}`}
             />
             <StatCard
               icon={TrendingUp}
-              label="Durchschnitt"
+              label={t.users.average[lang]}
               value={avgReferrals}
-              sub="pro Benutzer"
+              sub={t.users.perUser[lang]}
             />
           </div>
 
@@ -408,26 +411,26 @@ export default function UsersPage() {
           <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
             <div className="border-b border-white/10 px-5 py-3">
               <h2 className="text-sm font-medium text-white/70">
-                Rangliste nach Referrals
+                {t.users.rankingByReferrals[lang]}
               </h2>
             </div>
             <Table>
               <TableHeader>
                 <TableRow className="border-white/10 hover:bg-transparent">
                   <TableHead className="w-16 px-4 py-3 text-xs font-medium uppercase tracking-wider text-white/40">
-                    Rang
+                    {t.users.rank[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-white/40">
-                    Benutzer
+                    {t.users.user[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-white/40">
-                    Referral Code
+                    {t.users.referralCode[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-white/40">
-                    Anzahl Referrals
+                    {t.users.referralCount[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-white/40">
-                    Punkte
+                    {t.users.points[lang]}
                   </TableHead>
                 </TableRow>
               </TableHeader>

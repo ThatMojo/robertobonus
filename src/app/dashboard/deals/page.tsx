@@ -29,6 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useDashboardLang } from "../DashboardLangContext"
+import { t } from "../translations"
 
 type DealWithActive = CasinoBonus & { isActive: boolean }
 
@@ -37,11 +39,14 @@ function makeDeals(): DealWithActive[] {
 }
 
 export default function DealsPage() {
+  const { lang } = useDashboardLang()
   const [search, setSearch] = useState("")
   const [deals, setDeals] = useState<DealWithActive[]>(makeDeals)
   const [editDeal, setEditDeal] = useState<DealWithActive | null>(null)
   const [deleteDeal, setDeleteDeal] = useState<DealWithActive | null>(null)
   const [isNew, setIsNew] = useState(false)
+  const [rankInput, setRankInput] = useState("")
+  const [formError, setFormError] = useState("")
 
   const filtered = deals.filter((d) =>
     d.name.toLowerCase().includes(search.toLowerCase())
@@ -55,6 +60,8 @@ export default function DealsPage() {
 
   function openNew() {
     setIsNew(true)
+    setFormError("")
+    setRankInput(String(deals.length + 1))
     setEditDeal({
       id: `new-${Date.now()}`,
       rank: deals.length + 1,
@@ -81,13 +88,28 @@ export default function DealsPage() {
 
   function openEdit(deal: DealWithActive) {
     setIsNew(false)
+    setFormError("")
+    setRankInput(String(deal.rank))
     setEditDeal({ ...deal })
   }
 
   function saveDeal() {
-    if (!editDeal || !editDeal.name.trim()) return
+    if (!editDeal) return
+    setFormError("")
+
+    if (!editDeal.name.trim()) {
+      setFormError("Please enter a name.")
+      return
+    }
+
+    const parsedRank = parseInt(rankInput)
+    if (!rankInput.trim() || isNaN(parsedRank) || parsedRank < 1) {
+      setFormError("Please enter a valid rank number.")
+      return
+    }
+
     const slug = editDeal.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
-    const updated = { ...editDeal, slug }
+    const updated = { ...editDeal, rank: parsedRank, slug }
 
     if (isNew) {
       setDeals((prev) => [...prev, updated])
@@ -95,6 +117,7 @@ export default function DealsPage() {
       setDeals((prev) => prev.map((d) => (d.id === updated.id ? updated : d)))
     }
     setEditDeal(null)
+    setFormError("")
   }
 
   function confirmDelete() {
@@ -114,10 +137,10 @@ export default function DealsPage() {
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-white">
-            Deals verwalten
+            {t.deals.title[lang]}
           </h1>
           <p className="mt-1 text-sm text-white/40">
-            Verwalte und konfiguriere alle Casino-Deals
+            {t.deals.subtitle[lang]}
           </p>
         </div>
         <Button
@@ -125,7 +148,7 @@ export default function DealsPage() {
           className="w-fit bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-900/30 hover:from-purple-500 hover:to-purple-400"
         >
           <Plus className="mr-2 h-4 w-4" />
-          Neuer Deal
+          {t.deals.newDeal[lang]}
         </Button>
       </div>
 
@@ -133,7 +156,7 @@ export default function DealsPage() {
       <div className="relative mb-6 max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
         <Input
-          placeholder="Deals durchsuchen..."
+          placeholder={t.deals.searchPlaceholder[lang]}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="border-white/10 bg-white/[0.04] pl-9 text-white placeholder:text-white/30 focus-visible:border-purple-500/50 focus-visible:ring-0"
@@ -146,13 +169,13 @@ export default function DealsPage() {
           <TableHeader>
             <TableRow className="border-white/10 hover:bg-transparent">
               <TableHead className="w-12 text-xs font-semibold uppercase tracking-wider text-white/50">#</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">Casino</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">Bonus</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">Max. Bonus</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">Wager</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">Promo Code</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">Status</TableHead>
-              <TableHead className="text-right text-xs font-semibold uppercase tracking-wider text-white/50">Aktionen</TableHead>
+              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">{t.deals.casino[lang]}</TableHead>
+              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">{t.deals.bonus[lang]}</TableHead>
+              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">{t.deals.maxBonus[lang]}</TableHead>
+              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">{t.deals.wager[lang]}</TableHead>
+              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">{t.deals.promoCode[lang]}</TableHead>
+              <TableHead className="text-xs font-semibold uppercase tracking-wider text-white/50">{t.deals.status[lang]}</TableHead>
+              <TableHead className="text-right text-xs font-semibold uppercase tracking-wider text-white/50">{t.deals.actions[lang]}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -215,7 +238,7 @@ export default function DealsPage() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-white/40 hover:bg-white/5 hover:text-white"
-                      aria-label={`${deal.name} bearbeiten`}
+                      aria-label={`${deal.name} ${t.deals.edit[lang]}`}
                       onClick={() => openEdit(deal)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -224,7 +247,7 @@ export default function DealsPage() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-red-400/60 hover:bg-red-500/10 hover:text-red-400"
-                      aria-label={`${deal.name} löschen`}
+                      aria-label={`${deal.name} ${t.deals.delete[lang]}`}
                       onClick={() => setDeleteDeal(deal)}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -236,7 +259,7 @@ export default function DealsPage() {
             {filtered.length === 0 && (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={8} className="py-12 text-center text-sm text-white/30">
-                  Keine Deals gefunden.
+                  {t.deals.noDeals[lang]}
                 </TableCell>
               </TableRow>
             )}
@@ -244,14 +267,14 @@ export default function DealsPage() {
         </Table>
       </div>
 
-      <p className="mt-4 text-xs text-white/30">{deals.length} Deals insgesamt</p>
+      <p className="mt-4 text-xs text-white/30">{deals.length} {t.deals.totalDeals[lang]}</p>
 
       {/* Edit / New Dialog */}
       <Dialog open={!!editDeal} onOpenChange={(open) => !open && setEditDeal(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto border-white/10 bg-[#0d0815] text-white sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold text-white">
-              {isNew ? "Neuer Deal" : `${editDeal?.name} bearbeiten`}
+              {isNew ? t.deals.newDeal[lang] : `${editDeal?.name} ${t.deals.edit[lang]}`}
             </DialogTitle>
           </DialogHeader>
 
@@ -259,7 +282,7 @@ export default function DealsPage() {
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {/* Name */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Name</Label>
+                <Label className="text-white/60">{t.deals.name[lang]}</Label>
                 <Input
                   value={editDeal.name}
                   onChange={(e) => updateField("name", e.target.value)}
@@ -269,18 +292,20 @@ export default function DealsPage() {
 
               {/* Rank */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Rang</Label>
+                <Label className="text-white/60">{t.deals.rank[lang]}</Label>
                 <Input
-                  type="number"
-                  value={editDeal.rank}
-                  onChange={(e) => updateField("rank", parseInt(e.target.value) || 1)}
+                  type="text"
+                  inputMode="numeric"
+                  value={rankInput}
+                  onChange={(e) => setRankInput(e.target.value)}
+                  placeholder=""
                   className="border-white/10 bg-white/5 text-white"
                 />
               </div>
 
               {/* Bonus Percent */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Bonus %</Label>
+                <Label className="text-white/60">{t.deals.bonusPercent[lang]}</Label>
                 <Input
                   type="number"
                   value={editDeal.bonusPercent}
@@ -291,7 +316,7 @@ export default function DealsPage() {
 
               {/* Bonus Type */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Bonus Typ</Label>
+                <Label className="text-white/60">{t.deals.bonusType[lang]}</Label>
                 <Select
                   value={editDeal.bonusType}
                   onValueChange={(v) => updateField("bonusType", v as "sticky" | "non-sticky")}
@@ -308,7 +333,7 @@ export default function DealsPage() {
 
               {/* Max Bonus */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Max. Bonus (EUR)</Label>
+                <Label className="text-white/60">{t.deals.maxBonusEur[lang]}</Label>
                 <Input
                   type="number"
                   value={editDeal.maxBonus}
@@ -319,7 +344,7 @@ export default function DealsPage() {
 
               {/* Max Bet */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Max. Einsatz (EUR)</Label>
+                <Label className="text-white/60">{t.deals.maxBet[lang]}</Label>
                 <Input
                   type="number"
                   value={editDeal.maxBet}
@@ -330,7 +355,7 @@ export default function DealsPage() {
 
               {/* Wager Multiplier */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Wager (x)</Label>
+                <Label className="text-white/60">{t.deals.wagerMultiplier[lang]}</Label>
                 <Input
                   type="number"
                   value={editDeal.wagerMultiplier}
@@ -341,7 +366,7 @@ export default function DealsPage() {
 
               {/* Wager Type */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Wager Typ</Label>
+                <Label className="text-white/60">{t.deals.wagerType[lang]}</Label>
                 <Select
                   value={editDeal.wagerType}
                   onValueChange={(v) => updateField("wagerType", v)}
@@ -350,19 +375,19 @@ export default function DealsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="border-white/10 bg-[#1a1030] text-white">
-                    <SelectItem value="Nur Bonus">Nur Bonus</SelectItem>
-                    <SelectItem value="Bonus + Einzahlung">Bonus + Einzahlung</SelectItem>
+                    <SelectItem value="Nur Bonus">{t.deals.bonusOnly[lang]}</SelectItem>
+                    <SelectItem value="Bonus + Einzahlung">{t.deals.bonusDeposit[lang]}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {/* Free Spins */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Freispiele</Label>
+                <Label className="text-white/60">{t.deals.freeSpins[lang]}</Label>
                 <Input
                   type="number"
                   value={editDeal.freeSpins ?? ""}
-                  placeholder="Keine"
+                  placeholder={t.deals.noFreeSpins[lang]}
                   onChange={(e) => updateField("freeSpins", e.target.value ? parseInt(e.target.value) : null)}
                   className="border-white/10 bg-white/5 text-white"
                 />
@@ -370,10 +395,10 @@ export default function DealsPage() {
 
               {/* Promo Code */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Promo Code</Label>
+                <Label className="text-white/60">{t.deals.promoCode[lang]}</Label>
                 <Input
                   value={editDeal.promoCode ?? ""}
-                  placeholder="Kein Code"
+                  placeholder={t.deals.noCode[lang]}
                   onChange={(e) => updateField("promoCode", e.target.value || null)}
                   className="border-white/10 bg-white/5 text-white"
                 />
@@ -381,7 +406,7 @@ export default function DealsPage() {
 
               {/* Affiliate URL */}
               <div className="space-y-1.5 sm:col-span-2">
-                <Label className="text-white/60">Affiliate URL</Label>
+                <Label className="text-white/60">{t.deals.affiliateUrl[lang]}</Label>
                 <Input
                   value={editDeal.affiliateUrl}
                   onChange={(e) => updateField("affiliateUrl", e.target.value)}
@@ -391,10 +416,10 @@ export default function DealsPage() {
 
               {/* Badge Text */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Badge Text</Label>
+                <Label className="text-white/60">{t.deals.badgeText[lang]}</Label>
                 <Input
                   value={editDeal.badgeText ?? ""}
-                  placeholder="z.B. Exklusiv"
+                  placeholder={t.deals.egExclusive[lang]}
                   onChange={(e) => updateField("badgeText", e.target.value || null)}
                   className="border-white/10 bg-white/5 text-white"
                 />
@@ -402,7 +427,7 @@ export default function DealsPage() {
 
               {/* Features (comma separated) */}
               <div className="space-y-1.5">
-                <Label className="text-white/60">Features (Komma-getrennt)</Label>
+                <Label className="text-white/60">{t.deals.features[lang]}</Label>
                 <Input
                   value={editDeal.features.join(", ")}
                   onChange={(e) => updateField("features", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))}
@@ -418,7 +443,7 @@ export default function DealsPage() {
                     onCheckedChange={(v) => updateField("hasMerkur", v)}
                     className="data-[state=checked]:bg-purple-500"
                   />
-                  Merkur
+                  {t.deals.merkur[lang]}
                 </label>
                 <label className="flex items-center gap-2 text-sm text-white/70">
                   <Switch
@@ -426,7 +451,7 @@ export default function DealsPage() {
                     onCheckedChange={(v) => updateField("hasNovoline", v)}
                     className="data-[state=checked]:bg-purple-500"
                   />
-                  Novoline
+                  {t.deals.novoline[lang]}
                 </label>
                 <label className="flex items-center gap-2 text-sm text-white/70">
                   <Switch
@@ -434,9 +459,16 @@ export default function DealsPage() {
                     onCheckedChange={(v) => updateField("isExclusive", v)}
                     className="data-[state=checked]:bg-purple-500"
                   />
-                  Exklusiv
+                  {t.deals.exclusive[lang]}
                 </label>
               </div>
+
+              {/* Error */}
+              {formError && (
+                <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400 sm:col-span-2">
+                  {formError}
+                </div>
+              )}
 
               {/* Actions */}
               <div className="flex justify-end gap-3 sm:col-span-2">
@@ -446,14 +478,14 @@ export default function DealsPage() {
                   className="text-white/50 hover:bg-white/5 hover:text-white"
                 >
                   <X className="mr-1.5 h-4 w-4" />
-                  Abbrechen
+                  {t.deals.cancel[lang]}
                 </Button>
                 <Button
                   onClick={saveDeal}
                   className="bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:from-purple-500 hover:to-purple-400"
                 >
                   <Save className="mr-1.5 h-4 w-4" />
-                  Speichern
+                  {t.deals.save[lang]}
                 </Button>
               </div>
             </div>
@@ -466,11 +498,13 @@ export default function DealsPage() {
         <DialogContent className="border-white/10 bg-[#0d0815] text-white sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold text-white">
-              Deal löschen
+              {t.deals.deleteDeal[lang]}
             </DialogTitle>
           </DialogHeader>
           <p className="text-sm text-white/60">
-            Bist du sicher, dass du <strong className="text-white">{deleteDeal?.name}</strong> löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.
+            {t.deals.confirmDelete[lang]}{" "}
+            <strong className="text-white">{deleteDeal?.name}</strong>{" "}
+            {t.deals.deleteWarning[lang]}
           </p>
           <div className="mt-4 flex justify-end gap-3">
             <Button
@@ -478,14 +512,14 @@ export default function DealsPage() {
               onClick={() => setDeleteDeal(null)}
               className="text-white/50 hover:bg-white/5 hover:text-white"
             >
-              Abbrechen
+              {t.deals.cancel[lang]}
             </Button>
             <Button
               onClick={confirmDelete}
               className="bg-red-600 text-white hover:bg-red-500"
             >
               <Trash2 className="mr-1.5 h-4 w-4" />
-              Löschen
+              {t.deals.delete[lang]}
             </Button>
           </div>
         </DialogContent>

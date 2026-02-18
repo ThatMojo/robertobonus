@@ -29,11 +29,11 @@ export default function DealsSection() {
         <AnimatedSection>
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Casino Bonus Vergleich
+              Casino Bonus Comparison
             </h2>
             <p className="mt-2 text-white/50">
               {filtered.length}{" "}
-              {filtered.length === 1 ? "Angebot" : "Angebote"} gefunden
+              {filtered.length === 1 ? "offer" : "offers"} found
             </p>
           </div>
         </AnimatedSection>
@@ -60,9 +60,9 @@ export default function DealsSection() {
 
           {filtered.length === 0 && (
             <div className="py-16 text-center text-white/40">
-              <p className="text-lg">Keine Angebote gefunden</p>
+              <p className="text-lg">No offers found</p>
               <p className="mt-1 text-sm">
-                Versuche andere Filtereinstellungen
+                Try different filter settings
               </p>
             </div>
           )}

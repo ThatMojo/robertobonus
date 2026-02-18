@@ -4,7 +4,7 @@ import LeaderboardContent from "./LeaderboardContent"
 
 export const metadata: Metadata = {
   title: "Leaderboard",
-  description: `Die Top-Spieler der ${SITE_NAME} Community. Sieh dir die Rangliste an und vergleiche dich mit anderen.`,
+  description: `The top players of the ${SITE_NAME} community. Check the rankings and compare yourself with others.`,
 }
 
 export default function LeaderboardPage() {

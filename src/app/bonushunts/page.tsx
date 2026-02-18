@@ -4,7 +4,7 @@ import BonushuntsContent from "./BonushuntsContent"
 
 export const metadata: Metadata = {
   title: "Bonushunts",
-  description: `Alle Bonushunt Sessions von ${SITE_NAME}. Verfolge Live Hunts, Ergebnisse und Highlights.`,
+  description: `All Bonus Hunt Sessions from ${SITE_NAME}. Follow live hunts, results, and highlights.`,
 }
 
 export default function BonushuntsPage() {

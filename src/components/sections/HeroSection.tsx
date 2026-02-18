@@ -5,9 +5,9 @@ import ParticleBackground from "@/components/shared/ParticleBackground"
 import AnimatedSection from "@/components/shared/AnimatedSection"
 
 const features = [
-  { icon: Star, label: "Exklusive Deals" },
+  { icon: Star, label: "Exclusive Deals" },
   { icon: Zap, label: "Non-Sticky Bonus" },
-  { icon: Gift, label: "Freispiele" },
+  { icon: Gift, label: "Free Spins" },
   { icon: Sparkles, label: "Merkur & Novoline" },
 ]
 
@@ -52,7 +52,7 @@ export default function HeroSection() {
               <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6">
                 <Sparkles className="w-4 h-4 text-purple-400" />
                 <span className="text-sm text-purple-300 font-medium">
-                  Verifiziert von {STREAMER_NAME}
+                  Verified by {STREAMER_NAME}
                 </span>
               </div>
             </AnimatedSection>
@@ -61,7 +61,7 @@ export default function HeroSection() {
               {/* Headline */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
                 <span className="bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 bg-clip-text text-transparent">
-                  Die besten Casino
+                  The Best Casino
                 </span>
                 <br />
                 <span className="bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 bg-clip-text text-transparent">
@@ -73,10 +73,10 @@ export default function HeroSection() {
             <AnimatedSection delay={0.3}>
               {/* Subtitle */}
               <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mb-8 leading-relaxed lg:mx-0 mx-auto">
-                {STREAMER_NAME} vergleicht f&uuml;r dich die besten Online Casino
-                Boni. Exklusive Einzahlungsboni, Freispiele ohne
-                Umsatzbedingungen und faire Konditionen. Alle Deals persönlich
-                getestet und empfohlen.
+                {STREAMER_NAME} compares the best online casino bonuses for you.
+                Exclusive deposit bonuses, free spins without wagering
+                requirements and fair conditions. All deals personally tested
+                and recommended.
               </p>
             </AnimatedSection>
 
@@ -103,10 +103,10 @@ export default function HeroSection() {
                   className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all duration-300 hover:scale-[1.02]"
                 >
                   <Gift className="w-5 h-5" />
-                  Bonus Deals entdecken
+                  Discover Bonus Deals
                 </a>
                 <span className="text-sm text-gray-500">
-                  100% kostenlos &bull; Keine Anmeldung nötig
+                  100% free &bull; No registration required
                 </span>
               </div>
             </AnimatedSection>
@@ -119,7 +119,7 @@ export default function HeroSection() {
             {[
               { value: "50+", label: "Casino Deals" },
               { value: "24/7", label: "Live Streams" },
-              { value: "100%", label: "Exklusiv" },
+              { value: "100%", label: "Exclusive" },
               { value: "10k+", label: "Community" },
             ].map((stat) => (
               <div

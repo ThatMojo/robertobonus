@@ -21,11 +21,10 @@ export default function NewsBanner() {
             {/* Label + Text */}
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
               <span className="inline-flex items-center bg-purple-500/20 text-purple-300 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-purple-500/30">
-                Neu
+                New
               </span>
               <p className="text-sm sm:text-base text-gray-200 font-medium text-center sm:text-left">
-                Merkur &amp; Novoline Slots jetzt bei ausgew&auml;hlten Casinos
-                verf&uuml;gbar
+                Merkur &amp; Novoline Slots now available at selected casinos
               </p>
             </div>
 
@@ -34,7 +33,7 @@ export default function NewsBanner() {
               href="#deals"
               className="group inline-flex items-center gap-1.5 text-sm font-semibold text-purple-400 hover:text-purple-300 transition-colors flex-shrink-0"
             >
-              Casinos ansehen
+              View Casinos
             </a>
           </div>
         </div>

@@ -15,22 +15,22 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: `${SITE_NAME} | Die besten Casino Bonusangebote`,
+    default: `${SITE_NAME} | The Best Casino Bonus Offers`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",
-    locale: "de_DE",
+    locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Die besten Casino Bonusangebote`,
+    title: `${SITE_NAME} | The Best Casino Bonus Offers`,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} | Die besten Casino Bonusangebote`,
+    title: `${SITE_NAME} | The Best Casino Bonus Offers`,
     description: SITE_DESCRIPTION,
   },
   robots: {
@@ -45,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="de" className={inter.variable}>
+    <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-background text-foreground font-sans antialiased">
         <Providers>
           <AgeVerificationModal />

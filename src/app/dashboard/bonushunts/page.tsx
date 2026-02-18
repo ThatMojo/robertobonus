@@ -10,6 +10,8 @@ import {
   X,
   Save,
 } from "lucide-react"
+import { useDashboardLang } from "../DashboardLangContext"
+import { t } from "../translations"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -153,7 +155,7 @@ function calcPercentage(start: number, end: number): number {
   return ((end - start) / start) * 100
 }
 
-function StatusBadge({ status }: { status: SessionStatus }) {
+function StatusBadge({ status, lang }: { status: SessionStatus; lang: "de" | "en" }) {
   if (status === "live") {
     return (
       <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-medium text-emerald-400">
@@ -161,20 +163,20 @@ function StatusBadge({ status }: { status: SessionStatus }) {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
         </span>
-        Live
+        {t.bonushunts.live[lang]}
       </span>
     )
   }
   if (status === "upcoming") {
     return (
       <span className="inline-flex items-center rounded-full bg-blue-500/15 px-2.5 py-0.5 text-xs font-medium text-blue-400">
-        Bald
+        {t.bonushunts.upcoming[lang]}
       </span>
     )
   }
   return (
     <span className="inline-flex items-center rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-medium text-white/60">
-      Abgeschlossen
+      {t.bonushunts.completed[lang]}
     </span>
   )
 }
@@ -198,6 +200,7 @@ function ResultCell({ session }: { session: BonushuntSession }) {
 }
 
 export default function BonushuntsPage() {
+  const { lang } = useDashboardLang()
   const [sessions, setSessions] = useState<BonushuntSession[]>(initialSessions)
   const [editSession, setEditSession] = useState<BonushuntSession | null>(null)
   const [deleteSession, setDeleteSession] = useState<BonushuntSession | null>(null)
@@ -211,9 +214,9 @@ export default function BonushuntsPage() {
       : 0
 
   const stats = [
-    { label: "Gesamt Sessions", value: sessions.length.toString(), iconBg: "bg-purple-500/10", iconText: "text-purple-400" },
-    { label: "Live Sessions", value: liveSessions.toString(), isLive: true, iconBg: "bg-emerald-500/10", iconText: "text-emerald-400" },
-    { label: "Durchschnitt Gewinn", value: `+${avgGain.toFixed(1)}%`, iconBg: "bg-amber-500/10", iconText: "text-amber-400" },
+    { label: t.bonushunts.totalSessions[lang], value: sessions.length.toString(), iconBg: "bg-purple-500/10", iconText: "text-purple-400" },
+    { label: t.bonushunts.liveSessions[lang], value: liveSessions.toString(), isLive: true, iconBg: "bg-emerald-500/10", iconText: "text-emerald-400" },
+    { label: t.bonushunts.avgGain[lang], value: `+${avgGain.toFixed(1)}%`, iconBg: "bg-amber-500/10", iconText: "text-amber-400" },
   ]
 
   function openNew() {
@@ -261,15 +264,15 @@ export default function BonushuntsPage() {
       {/* Page header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Bonushunts verwalten</h1>
-          <p className="mt-1 text-sm text-white/50">Alle Hunt-Sessions auf einen Blick</p>
+          <h1 className="text-2xl font-semibold text-white">{t.bonushunts.title[lang]}</h1>
+          <p className="mt-1 text-sm text-white/50">{t.bonushunts.subtitle[lang]}</p>
         </div>
         <Button
           onClick={openNew}
           className="gap-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/20 hover:from-purple-500 hover:to-purple-400"
         >
           <Plus className="h-4 w-4" />
-          Neue Session
+          {t.bonushunts.newSession[lang]}
         </Button>
       </div>
 
@@ -301,26 +304,26 @@ export default function BonushuntsPage() {
       {/* Sessions table */}
       <div className="rounded-xl border border-white/10 bg-white/[0.02]">
         <div className="border-b border-white/10 px-6 py-4">
-          <h2 className="text-base font-semibold text-white">Alle Sessions</h2>
+          <h2 className="text-base font-semibold text-white">{t.bonushunts.allSessions[lang]}</h2>
         </div>
         <Table>
           <TableHeader>
             <TableRow className="border-white/10 hover:bg-transparent">
-              <TableHead className="text-white/50">Titel</TableHead>
-              <TableHead className="text-white/50">Status</TableHead>
-              <TableHead className="text-white/50">Startbetrag</TableHead>
-              <TableHead className="text-white/50">Ergebnis</TableHead>
-              <TableHead className="text-white/50">Slots</TableHead>
-              <TableHead className="text-white/50">Stream Datum</TableHead>
-              <TableHead className="text-white/50">Twitch VOD</TableHead>
-              <TableHead className="text-right text-white/50">Aktionen</TableHead>
+              <TableHead className="text-white/50">{t.bonushunts.sessionTitle[lang]}</TableHead>
+              <TableHead className="text-white/50">{t.bonushunts.status[lang]}</TableHead>
+              <TableHead className="text-white/50">{t.bonushunts.startAmount[lang]}</TableHead>
+              <TableHead className="text-white/50">{t.bonushunts.result[lang]}</TableHead>
+              <TableHead className="text-white/50">{t.bonushunts.slots[lang]}</TableHead>
+              <TableHead className="text-white/50">{t.bonushunts.streamDate[lang]}</TableHead>
+              <TableHead className="text-white/50">{t.bonushunts.twitchVod[lang]}</TableHead>
+              <TableHead className="text-right text-white/50">{t.bonushunts.actions[lang]}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sessions.map((session) => (
               <TableRow key={session.id} className="border-white/10 transition-colors hover:bg-white/[0.03]">
                 <TableCell className="font-medium text-white">{session.title}</TableCell>
-                <TableCell><StatusBadge status={session.status} /></TableCell>
+                <TableCell><StatusBadge status={session.status} lang={lang} /></TableCell>
                 <TableCell className="text-white/70">{formatCurrency(session.startAmount)}</TableCell>
                 <TableCell><ResultCell session={session} /></TableCell>
                 <TableCell className="text-white/70">
@@ -373,14 +376,14 @@ export default function BonushuntsPage() {
         <DialogContent className="border-white/10 bg-[#0d0815] text-white sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold text-white">
-              {isNew ? "Neue Session" : `${editSession?.title} bearbeiten`}
+              {isNew ? t.bonushunts.newSessionTitle[lang] : `${editSession?.title} ${t.bonushunts.edit[lang]}`}
             </DialogTitle>
           </DialogHeader>
 
           {editSession && (
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5 sm:col-span-2">
-                <Label className="text-white/60">Titel</Label>
+                <Label className="text-white/60">{t.bonushunts.sessionTitle[lang]}</Label>
                 <Input
                   value={editSession.title}
                   onChange={(e) => updateField("title", e.target.value)}
@@ -388,7 +391,7 @@ export default function BonushuntsPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-white/60">Startbetrag (EUR)</Label>
+                <Label className="text-white/60">{t.bonushunts.startAmountLabel[lang]}</Label>
                 <Input
                   type="number"
                   value={editSession.startAmount}
@@ -397,17 +400,17 @@ export default function BonushuntsPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-white/60">Endbetrag (EUR)</Label>
+                <Label className="text-white/60">{t.bonushunts.endAmount[lang]}</Label>
                 <Input
                   type="number"
                   value={editSession.endAmount ?? ""}
-                  placeholder="Noch offen"
+                  placeholder={t.bonushunts.stillOpen[lang]}
                   onChange={(e) => updateField("endAmount", e.target.value ? parseFloat(e.target.value) : null)}
                   className="border-white/10 bg-white/5 text-white"
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-white/60">Status</Label>
+                <Label className="text-white/60">{t.bonushunts.status[lang]}</Label>
                 <Select
                   value={editSession.status}
                   onValueChange={(v) => updateField("status", v as SessionStatus)}
@@ -416,14 +419,14 @@ export default function BonushuntsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="border-white/10 bg-[#1a1030] text-white">
-                    <SelectItem value="upcoming">Bald</SelectItem>
-                    <SelectItem value="live">Live</SelectItem>
-                    <SelectItem value="completed">Abgeschlossen</SelectItem>
+                    <SelectItem value="upcoming">{t.bonushunts.upcoming[lang]}</SelectItem>
+                    <SelectItem value="live">{t.bonushunts.live[lang]}</SelectItem>
+                    <SelectItem value="completed">{t.bonushunts.completed[lang]}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-white/60">Slots Anzahl</Label>
+                <Label className="text-white/60">{t.bonushunts.slotsCount[lang]}</Label>
                 <Input
                   type="number"
                   value={editSession.slotsCount}
@@ -432,7 +435,7 @@ export default function BonushuntsPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-white/60">Stream Datum</Label>
+                <Label className="text-white/60">{t.bonushunts.streamDate[lang]}</Label>
                 <Input
                   type="date"
                   value={editSession.streamDate}
@@ -441,10 +444,10 @@ export default function BonushuntsPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-white/60">Twitch VOD URL</Label>
+                <Label className="text-white/60">{t.bonushunts.twitchVodUrl[lang]}</Label>
                 <Input
                   value={editSession.twitchVod ?? ""}
-                  placeholder="Kein VOD"
+                  placeholder={t.bonushunts.noVod[lang]}
                   onChange={(e) => updateField("twitchVod", e.target.value || null)}
                   className="border-white/10 bg-white/5 text-white"
                 />
@@ -456,14 +459,14 @@ export default function BonushuntsPage() {
                   className="text-white/50 hover:bg-white/5 hover:text-white"
                 >
                   <X className="mr-1.5 h-4 w-4" />
-                  Abbrechen
+                  {t.bonushunts.cancel[lang]}
                 </Button>
                 <Button
                   onClick={saveSession}
                   className="bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:from-purple-500 hover:to-purple-400"
                 >
                   <Save className="mr-1.5 h-4 w-4" />
-                  Speichern
+                  {t.bonushunts.save[lang]}
                 </Button>
               </div>
             </div>
@@ -475,10 +478,12 @@ export default function BonushuntsPage() {
       <Dialog open={!!deleteSession} onOpenChange={(open) => !open && setDeleteSession(null)}>
         <DialogContent className="border-white/10 bg-[#0d0815] text-white sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold text-white">Session löschen</DialogTitle>
+            <DialogTitle className="text-lg font-semibold text-white">{t.bonushunts.deleteSession[lang]}</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-white/60">
-            Bist du sicher, dass du <strong className="text-white">{deleteSession?.title}</strong> löschen möchtest?
+            {t.bonushunts.confirmDelete[lang]}{" "}
+            <strong className="text-white">{deleteSession?.title}</strong>
+            {t.bonushunts.deleteWarning[lang]}
           </p>
           <div className="mt-4 flex justify-end gap-3">
             <Button
@@ -486,11 +491,11 @@ export default function BonushuntsPage() {
               onClick={() => setDeleteSession(null)}
               className="text-white/50 hover:bg-white/5 hover:text-white"
             >
-              Abbrechen
+              {t.bonushunts.cancel[lang]}
             </Button>
             <Button onClick={confirmDelete} className="bg-red-600 text-white hover:bg-red-500">
               <Trash2 className="mr-1.5 h-4 w-4" />
-              Löschen
+              {t.bonushunts.delete[lang]}
             </Button>
           </div>
         </DialogContent>

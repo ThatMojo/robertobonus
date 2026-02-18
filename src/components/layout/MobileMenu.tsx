@@ -56,7 +56,7 @@ export default function MobileMenu({ open, onClose }: Props) {
               onClick={onClose}
               className="block w-full text-center rounded-lg bg-gradient-to-r from-purple-600 to-purple-500 px-4 py-2.5 text-sm font-semibold text-white"
             >
-              Anmelden
+              Login
             </Link>
             <div className="flex items-center justify-center gap-4">
               <a href={SOCIAL_LINKS.twitch} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-purple-400 transition-colors">

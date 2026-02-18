@@ -7,50 +7,50 @@ export interface FAQItem {
 export const faqItems: FAQItem[] = [
   {
     id: "was-ist-casino-bonus",
-    question: "Was ist ein Casino Bonus?",
+    question: "What is a casino bonus?",
     answer:
-      "Ein Casino Bonus ist ein Angebot des Online Casinos, bei dem du zusätzliches Guthaben oder Freispiele auf deine Einzahlung erhältst. Zum Beispiel bedeutet ein 200% Bonus, dass du bei einer Einzahlung von 100€ insgesamt 300€ zum Spielen hast, also deine 100€ Einzahlung plus 200€ Bonusguthaben.",
+      "A casino bonus is an offer from the online casino where you receive additional credit or free spins on your deposit. For example, a 200% bonus means that with a deposit of €100 you have a total of €300 to play with — your €100 deposit plus €200 in bonus credit.",
   },
   {
     id: "sticky-vs-non-sticky",
-    question: "Was bedeutet Sticky vs Non-Sticky Bonus?",
+    question: "What does Sticky vs Non-Sticky Bonus mean?",
     answer:
-      "Bei einem Non-Sticky Bonus wird zuerst dein Echtgeld verwendet. Gewinnst du damit, kannst du dir den Gewinn direkt auszahlen lassen, ohne Umsatzbedingungen erfüllen zu müssen. Beim Sticky Bonus wird Echtgeld und Bonusgeld gleichzeitig eingesetzt, hier müssen die Umsatzbedingungen immer vollständig erfüllt werden, bevor eine Auszahlung möglich ist. Non-Sticky ist in der Regel die spielerfreundlichere Variante.",
+      "With a Non-Sticky bonus your real money is used first. If you win with it, you can withdraw the winnings directly without having to meet wagering requirements. With a Sticky bonus, real money and bonus money are used simultaneously — here the wagering requirements must always be fully met before a withdrawal is possible. Non-Sticky is generally the more player-friendly option.",
   },
   {
     id: "umsatzbedingungen",
-    question: "Was sind Umsatzbedingungen (Wagering)?",
+    question: "What are wagering requirements?",
     answer:
-      "Umsatzbedingungen geben an, wie oft du den Bonusbetrag einsetzen musst, bevor eine Auszahlung möglich ist. Ein 35x Wagering bei 100€ Bonus bedeutet, dass du insgesamt 3.500€ an Einsätzen tätigen musst. Achte darauf, ob sich die Bedingungen nur auf den Bonus oder auf Bonus plus Einzahlung beziehen, das macht einen großen Unterschied.",
+      "Wagering requirements specify how many times you must wager the bonus amount before a withdrawal is possible. A 35x wager on a €100 bonus means you must place a total of €3,500 in bets. Pay attention to whether the conditions apply only to the bonus or to the bonus plus deposit — this makes a big difference.",
   },
   {
     id: "bonus-aktivieren",
-    question: "Wie aktiviere ich einen Bonus?",
+    question: "How do I activate a bonus?",
     answer:
-      "Die meisten Boni werden automatisch bei der Einzahlung aktiviert. Einige Casinos erfordern die Eingabe eines Promocodes während der Einzahlung. In unserer Übersicht findest du bei jedem Casino den entsprechenden Code (z.B. ROBERTO). Klicke einfach auf den Button, der Code wird automatisch kopiert.",
+      "Most bonuses are automatically activated upon deposit. Some casinos require entering a promo code during the deposit. In our overview you will find the corresponding code for each casino (e.g. ROBERTO). Simply click the button and the code will be copied automatically.",
   },
   {
     id: "merkur-novoline-online",
-    question: "Kann ich Merkur & Novoline Slots online spielen?",
+    question: "Can I play Merkur & Novoline slots online?",
     answer:
-      "Ja, ausgewählte Online Casinos bieten Merkur-Klassiker wie Eye of Horus, El Torero oder Blazing Star sowie Novoline-Hits wie Book of Ra und Lucky Lady's Charm an. In unserer Übersicht sind Casinos mit Merkur- und Novoline-Slots entsprechend gekennzeichnet, damit du schnell das passende Casino findest.",
+      "Yes, selected online casinos offer Merkur classics such as Eye of Horus, El Torero or Blazing Star as well as Novoline hits like Book of Ra and Lucky Lady's Charm. In our overview, casinos with Merkur and Novoline slots are marked accordingly so you can quickly find the right casino.",
   },
   {
     id: "casinos-sicher",
-    question: "Sind die empfohlenen Casinos sicher?",
+    question: "Are the recommended casinos safe?",
     answer:
-      "Wir empfehlen ausschließlich Casinos, die über gültige Glücksspiellizenzen verfügen (z.B. Curacao, Malta oder eine deutsche Lizenz). Alle gelisteten Casinos verwenden SSL-Verschlüsselung und bieten verifizierte Auszahlungsprozesse. Trotzdem gilt: Spiele verantwortungsvoll und setze nur Geld ein, dessen Verlust du verkraften kannst.",
+      "We only recommend casinos that hold valid gambling licences (e.g. Curacao, Malta or a German licence). All listed casinos use SSL encryption and offer verified withdrawal processes. Nevertheless: play responsibly and only wager money you can afford to lose.",
   },
   {
     id: "was-ist-promocode",
-    question: "Was ist ein Promocode?",
+    question: "What is a promo code?",
     answer:
-      "Ein Promocode (auch Bonuscode genannt) ist ein spezieller Code, den du bei der Einzahlung eingibst, um einen exklusiven Bonus freizuschalten. Unsere exklusiven Deals verwenden oft den Code ROBERTO, damit erhältst du bessere Konditionen als beim Standard-Bonus des Casinos.",
+      "A promo code (also called a bonus code) is a special code you enter during your deposit to unlock an exclusive bonus. Our exclusive deals often use the code ROBERTO, which gives you better terms than the casino's standard bonus.",
   },
   {
     id: "auszahlungsdauer",
-    question: "Wie lange dauern Auszahlungen?",
+    question: "How long do withdrawals take?",
     answer:
-      "Die Auszahlungsdauer variiert je nach Casino und Zahlungsmethode. E-Wallets wie Skrill oder Neteller sind in der Regel am schnellsten (0-24 Stunden). Kryptowährungen werden oft innerhalb weniger Stunden bearbeitet. Banküberweisungen können 1-5 Werktage dauern. Die meisten Casinos haben zusätzlich eine interne Bearbeitungszeit von 24-48 Stunden.",
+      "Withdrawal times vary depending on the casino and payment method. E-wallets such as Skrill or Neteller are generally the fastest (0–24 hours). Cryptocurrencies are often processed within a few hours. Bank transfers can take 1–5 business days. Most casinos also have an internal processing time of 24–48 hours.",
   },
 ]

@@ -13,33 +13,8 @@ import {
   X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const navItems = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-    exact: true,
-  },
-  {
-    label: "Deals",
-    href: "/dashboard/deals",
-    icon: Tag,
-    exact: false,
-  },
-  {
-    label: "Benutzer",
-    href: "/dashboard/users",
-    icon: Users,
-    exact: false,
-  },
-  {
-    label: "Bonushunts",
-    href: "/dashboard/bonushunts",
-    icon: Flame,
-    exact: false,
-  },
-]
+import { DashboardLangProvider, useDashboardLang } from "./DashboardLangContext"
+import { t } from "./translations"
 
 function SidebarContent({
   pathname,
@@ -48,6 +23,35 @@ function SidebarContent({
   pathname: string
   onNavClick?: () => void
 }) {
+  const { lang, setLang } = useDashboardLang()
+
+  const navItems = [
+    {
+      label: t.sidebar.dashboard[lang],
+      href: "/dashboard",
+      icon: LayoutDashboard,
+      exact: true,
+    },
+    {
+      label: t.sidebar.deals[lang],
+      href: "/dashboard/deals",
+      icon: Tag,
+      exact: false,
+    },
+    {
+      label: t.sidebar.users[lang],
+      href: "/dashboard/users",
+      icon: Users,
+      exact: false,
+    },
+    {
+      label: t.sidebar.bonushunts[lang],
+      href: "/dashboard/bonushunts",
+      icon: Flame,
+      exact: false,
+    },
+  ]
+
   return (
     <div className="flex h-full flex-col">
       {/* Branding */}
@@ -92,22 +96,52 @@ function SidebarContent({
         </ul>
       </nav>
 
-      {/* Footer link */}
-      <div className="border-t border-white/10 px-3 py-4">
+      {/* Footer */}
+      <div className="border-t border-white/10 px-3 py-4 space-y-2">
+        {/* Language toggle */}
+        <div className="flex items-center gap-1 px-3 py-1">
+          <button
+            type="button"
+            onClick={() => setLang("de")}
+            className={cn(
+              "rounded px-2.5 py-1 text-xs font-semibold transition-colors",
+              lang === "de"
+                ? "bg-purple-500 text-white"
+                : "text-white/40 hover:text-white/70"
+            )}
+          >
+            DE
+          </button>
+          <span className="text-white/20 text-xs">|</span>
+          <button
+            type="button"
+            onClick={() => setLang("en")}
+            className={cn(
+              "rounded px-2.5 py-1 text-xs font-semibold transition-colors",
+              lang === "en"
+                ? "bg-purple-500 text-white"
+                : "text-white/40 hover:text-white/70"
+            )}
+          >
+            EN
+          </button>
+        </div>
+
+        {/* Back to site */}
         <Link
           href="/"
           onClick={onNavClick}
           className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white/40 transition-colors hover:bg-white/5 hover:text-white/70"
         >
           <ExternalLink className="h-4 w-4 shrink-0" />
-          Zurück zur Seite
+          {t.sidebar.backToSite[lang]}
         </Link>
       </div>
     </div>
   )
 }
 
-export default function DashboardLayout({
+function DashboardLayoutInner({
   children,
 }: {
   children: React.ReactNode
@@ -152,20 +186,19 @@ export default function DashboardLayout({
             type="button"
             onClick={() => setSidebarOpen(true)}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-white/60 transition-colors hover:bg-white/5 hover:text-white"
-            aria-label="Menü öffnen"
+            aria-label="Open menu"
           >
             <Menu className="h-5 w-5" />
           </button>
           <span className="ml-3 text-base font-semibold text-white">
             Roberto<span className="text-purple-400">bonus</span>
           </span>
-          {/* Close button inside mobile bar when open */}
           {sidebarOpen && (
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
               className="ml-auto flex h-9 w-9 items-center justify-center rounded-lg text-white/60 transition-colors hover:bg-white/5 hover:text-white"
-              aria-label="Menü schließen"
+              aria-label="Close menu"
             >
               <X className="h-5 w-5" />
             </button>
@@ -178,5 +211,17 @@ export default function DashboardLayout({
         </main>
       </div>
     </div>
+  )
+}
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <DashboardLangProvider>
+      <DashboardLayoutInner>{children}</DashboardLayoutInner>
+    </DashboardLangProvider>
   )
 }
