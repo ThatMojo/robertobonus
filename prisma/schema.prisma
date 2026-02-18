@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
+  points        Int       @default(0)
+  referralCode  String    @unique @default(cuid())
+  referredBy    String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Deal {
+  id              String   @id @default(cuid())
+  rank            Int
+  name            String
+  slug            String   @unique
+  logo            String
+  bonusPercent    Int
+  bonusType       String
+  maxBonus        Int
+  maxBet          Int
+  freeSpins       Int?
+  wagerMultiplier Int
+  wagerType       String
+  features        String[]
+  promoCode       String?
+  affiliateUrl    String
+  hasMerkur       Boolean  @default(false)
+  hasNovoline     Boolean  @default(false)
+  isExclusive     Boolean  @default(false)
+  badgeText       String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model BonusHunt {
+  id          String   @id @default(cuid())
+  title       String
+  startAmount Float
+  endAmount   Float?
+  status      String   @default("upcoming")
+  slots       Json     @default("[]")
+  streamDate  DateTime
+  twitchVod   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteSettings {
+  id              String  @id @default("main")
+  dashboardActive Boolean @default(true)
+  maintenanceMode Boolean @default(false)
+}
