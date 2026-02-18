@@ -1,11 +1,14 @@
 "use client"
 
+import { useState } from "react"
 import {
   Flame,
   Plus,
   Pencil,
   Trash2,
   ExternalLink,
+  X,
+  Save,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,6 +19,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 
 type SessionStatus = "completed" | "live" | "upcoming"
@@ -31,7 +49,7 @@ interface BonushuntSession {
   twitchVod: string | null
 }
 
-const mockSessions: BonushuntSession[] = [
+const initialSessions: BonushuntSession[] = [
   {
     id: "1",
     title: "Freitag Abend Hunt",
@@ -147,7 +165,6 @@ function StatusBadge({ status }: { status: SessionStatus }) {
       </span>
     )
   }
-
   if (status === "upcoming") {
     return (
       <span className="inline-flex items-center rounded-full bg-blue-500/15 px-2.5 py-0.5 text-xs font-medium text-blue-400">
@@ -155,7 +172,6 @@ function StatusBadge({ status }: { status: SessionStatus }) {
       </span>
     )
   }
-
   return (
     <span className="inline-flex items-center rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-medium text-white/60">
       Abgeschlossen
@@ -163,80 +179,93 @@ function StatusBadge({ status }: { status: SessionStatus }) {
   )
 }
 
-function ResultCell({
-  session,
-}: {
-  session: BonushuntSession
-}) {
+function ResultCell({ session }: { session: BonushuntSession }) {
   if (session.status !== "completed" || session.endAmount === null) {
     return <span className="text-white/30">---</span>
   }
-
   const pct = calcPercentage(session.startAmount, session.endAmount)
   const isProfit = pct >= 0
-
   return (
     <div className="flex flex-col gap-0.5">
       <span className={cn("text-sm font-medium", isProfit ? "text-emerald-400" : "text-red-400")}>
         {formatCurrency(session.endAmount)}
       </span>
       <span className={cn("text-xs", isProfit ? "text-emerald-400/70" : "text-red-400/70")}>
-        {isProfit ? "+" : ""}
-        {pct.toFixed(1)}%
+        {isProfit ? "+" : ""}{pct.toFixed(1)}%
       </span>
     </div>
   )
 }
 
-const totalSessions = mockSessions.length
-const liveSessions = mockSessions.filter((s) => s.status === "live").length
-const completedSessions = mockSessions.filter(
-  (s) => s.status === "completed" && s.endAmount !== null
-)
-const avgGain =
-  completedSessions.length > 0
-    ? completedSessions.reduce(
-        (acc, s) => acc + calcPercentage(s.startAmount, s.endAmount!),
-        0
-      ) / completedSessions.length
-    : 0
-
-const stats = [
-  {
-    label: "Gesamt Sessions",
-    value: totalSessions.toString(),
-    iconBg: "bg-purple-500/10",
-    iconText: "text-purple-400",
-  },
-  {
-    label: "Live Sessions",
-    value: liveSessions.toString(),
-    isLive: true,
-    iconBg: "bg-emerald-500/10",
-    iconText: "text-emerald-400",
-  },
-  {
-    label: "Durchschnitt Gewinn",
-    value: `+${avgGain.toFixed(1)}%`,
-    iconBg: "bg-amber-500/10",
-    iconText: "text-amber-400",
-  },
-]
-
 export default function BonushuntsPage() {
+  const [sessions, setSessions] = useState<BonushuntSession[]>(initialSessions)
+  const [editSession, setEditSession] = useState<BonushuntSession | null>(null)
+  const [deleteSession, setDeleteSession] = useState<BonushuntSession | null>(null)
+  const [isNew, setIsNew] = useState(false)
+
+  const completedSessions = sessions.filter((s) => s.status === "completed" && s.endAmount !== null)
+  const liveSessions = sessions.filter((s) => s.status === "live").length
+  const avgGain =
+    completedSessions.length > 0
+      ? completedSessions.reduce((acc, s) => acc + calcPercentage(s.startAmount, s.endAmount!), 0) / completedSessions.length
+      : 0
+
+  const stats = [
+    { label: "Gesamt Sessions", value: sessions.length.toString(), iconBg: "bg-purple-500/10", iconText: "text-purple-400" },
+    { label: "Live Sessions", value: liveSessions.toString(), isLive: true, iconBg: "bg-emerald-500/10", iconText: "text-emerald-400" },
+    { label: "Durchschnitt Gewinn", value: `+${avgGain.toFixed(1)}%`, iconBg: "bg-amber-500/10", iconText: "text-amber-400" },
+  ]
+
+  function openNew() {
+    setIsNew(true)
+    setEditSession({
+      id: `new-${Date.now()}`,
+      title: "",
+      startAmount: 0,
+      endAmount: null,
+      status: "upcoming",
+      slotsCount: 0,
+      streamDate: new Date().toISOString().split("T")[0],
+      twitchVod: null,
+    })
+  }
+
+  function openEdit(session: BonushuntSession) {
+    setIsNew(false)
+    setEditSession({ ...session })
+  }
+
+  function saveSession() {
+    if (!editSession || !editSession.title.trim()) return
+    if (isNew) {
+      setSessions((prev) => [...prev, editSession])
+    } else {
+      setSessions((prev) => prev.map((s) => (s.id === editSession.id ? editSession : s)))
+    }
+    setEditSession(null)
+  }
+
+  function confirmDelete() {
+    if (!deleteSession) return
+    setSessions((prev) => prev.filter((s) => s.id !== deleteSession.id))
+    setDeleteSession(null)
+  }
+
+  function updateField<K extends keyof BonushuntSession>(key: K, value: BonushuntSession[K]) {
+    if (!editSession) return
+    setEditSession({ ...editSession, [key]: value })
+  }
+
   return (
     <div className="p-6 lg:p-8">
       {/* Page header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white">
-            Bonushunts verwalten
-          </h1>
-          <p className="mt-1 text-sm text-white/50">
-            Alle Hunt-Sessions auf einen Blick
-          </p>
+          <h1 className="text-2xl font-semibold text-white">Bonushunts verwalten</h1>
+          <p className="mt-1 text-sm text-white/50">Alle Hunt-Sessions auf einen Blick</p>
         </div>
         <Button
+          onClick={openNew}
           className="gap-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/20 hover:from-purple-500 hover:to-purple-400"
         >
           <Plus className="h-4 w-4" />
@@ -247,10 +276,7 @@ export default function BonushuntsPage() {
       {/* Stats cards */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-xl border border-white/10 bg-white/5 p-6"
-          >
+          <div key={stat.label} className="rounded-xl border border-white/10 bg-white/5 p-6">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-white/60">{stat.label}</p>
@@ -264,12 +290,7 @@ export default function BonushuntsPage() {
                   )}
                 </div>
               </div>
-              <div
-                className={cn(
-                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
-                  stat.iconBg
-                )}
-              >
+              <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", stat.iconBg)}>
                 <Flame className={cn("h-5 w-5", stat.iconText)} />
               </div>
             </div>
@@ -296,31 +317,16 @@ export default function BonushuntsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockSessions.map((session) => (
-              <TableRow
-                key={session.id}
-                className="border-white/10 transition-colors hover:bg-white/[0.03]"
-              >
-                <TableCell className="font-medium text-white">
-                  {session.title}
-                </TableCell>
-                <TableCell>
-                  <StatusBadge status={session.status} />
-                </TableCell>
+            {sessions.map((session) => (
+              <TableRow key={session.id} className="border-white/10 transition-colors hover:bg-white/[0.03]">
+                <TableCell className="font-medium text-white">{session.title}</TableCell>
+                <TableCell><StatusBadge status={session.status} /></TableCell>
+                <TableCell className="text-white/70">{formatCurrency(session.startAmount)}</TableCell>
+                <TableCell><ResultCell session={session} /></TableCell>
                 <TableCell className="text-white/70">
-                  {formatCurrency(session.startAmount)}
+                  {session.slotsCount > 0 ? session.slotsCount : <span className="text-white/30">---</span>}
                 </TableCell>
-                <TableCell>
-                  <ResultCell session={session} />
-                </TableCell>
-                <TableCell className="text-white/70">
-                  {session.slotsCount > 0 ? session.slotsCount : (
-                    <span className="text-white/30">---</span>
-                  )}
-                </TableCell>
-                <TableCell className="text-white/70">
-                  {formatDate(session.streamDate)}
-                </TableCell>
+                <TableCell className="text-white/70">{formatDate(session.streamDate)}</TableCell>
                 <TableCell>
                   {session.twitchVod ? (
                     <a
@@ -342,17 +348,17 @@ export default function BonushuntsPage() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-white/40 hover:bg-white/10 hover:text-white"
+                      onClick={() => openEdit(session)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
-                      <span className="sr-only">Bearbeiten</span>
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-white/40 hover:bg-red-500/10 hover:text-red-400"
+                      onClick={() => setDeleteSession(session)}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
-                      <span className="sr-only">Löschen</span>
                     </Button>
                   </div>
                 </TableCell>
@@ -361,6 +367,134 @@ export default function BonushuntsPage() {
           </TableBody>
         </Table>
       </div>
+
+      {/* Edit / New Dialog */}
+      <Dialog open={!!editSession} onOpenChange={(open) => !open && setEditSession(null)}>
+        <DialogContent className="border-white/10 bg-[#0d0815] text-white sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-white">
+              {isNew ? "Neue Session" : `${editSession?.title} bearbeiten`}
+            </DialogTitle>
+          </DialogHeader>
+
+          {editSession && (
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5 sm:col-span-2">
+                <Label className="text-white/60">Titel</Label>
+                <Input
+                  value={editSession.title}
+                  onChange={(e) => updateField("title", e.target.value)}
+                  className="border-white/10 bg-white/5 text-white"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-white/60">Startbetrag (EUR)</Label>
+                <Input
+                  type="number"
+                  value={editSession.startAmount}
+                  onChange={(e) => updateField("startAmount", parseFloat(e.target.value) || 0)}
+                  className="border-white/10 bg-white/5 text-white"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-white/60">Endbetrag (EUR)</Label>
+                <Input
+                  type="number"
+                  value={editSession.endAmount ?? ""}
+                  placeholder="Noch offen"
+                  onChange={(e) => updateField("endAmount", e.target.value ? parseFloat(e.target.value) : null)}
+                  className="border-white/10 bg-white/5 text-white"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-white/60">Status</Label>
+                <Select
+                  value={editSession.status}
+                  onValueChange={(v) => updateField("status", v as SessionStatus)}
+                >
+                  <SelectTrigger className="border-white/10 bg-white/5 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="border-white/10 bg-[#1a1030] text-white">
+                    <SelectItem value="upcoming">Bald</SelectItem>
+                    <SelectItem value="live">Live</SelectItem>
+                    <SelectItem value="completed">Abgeschlossen</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-white/60">Slots Anzahl</Label>
+                <Input
+                  type="number"
+                  value={editSession.slotsCount}
+                  onChange={(e) => updateField("slotsCount", parseInt(e.target.value) || 0)}
+                  className="border-white/10 bg-white/5 text-white"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-white/60">Stream Datum</Label>
+                <Input
+                  type="date"
+                  value={editSession.streamDate}
+                  onChange={(e) => updateField("streamDate", e.target.value)}
+                  className="border-white/10 bg-white/5 text-white"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-white/60">Twitch VOD URL</Label>
+                <Input
+                  value={editSession.twitchVod ?? ""}
+                  placeholder="Kein VOD"
+                  onChange={(e) => updateField("twitchVod", e.target.value || null)}
+                  className="border-white/10 bg-white/5 text-white"
+                />
+              </div>
+              <div className="flex justify-end gap-3 sm:col-span-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => setEditSession(null)}
+                  className="text-white/50 hover:bg-white/5 hover:text-white"
+                >
+                  <X className="mr-1.5 h-4 w-4" />
+                  Abbrechen
+                </Button>
+                <Button
+                  onClick={saveSession}
+                  className="bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:from-purple-500 hover:to-purple-400"
+                >
+                  <Save className="mr-1.5 h-4 w-4" />
+                  Speichern
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={!!deleteSession} onOpenChange={(open) => !open && setDeleteSession(null)}>
+        <DialogContent className="border-white/10 bg-[#0d0815] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-white">Session löschen</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-white/60">
+            Bist du sicher, dass du <strong className="text-white">{deleteSession?.title}</strong> löschen möchtest?
+          </p>
+          <div className="mt-4 flex justify-end gap-3">
+            <Button
+              variant="ghost"
+              onClick={() => setDeleteSession(null)}
+              className="text-white/50 hover:bg-white/5 hover:text-white"
+            >
+              Abbrechen
+            </Button>
+            <Button onClick={confirmDelete} className="bg-red-600 text-white hover:bg-red-500">
+              <Trash2 className="mr-1.5 h-4 w-4" />
+              Löschen
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
