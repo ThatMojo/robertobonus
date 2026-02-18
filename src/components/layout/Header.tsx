@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, Twitch } from "lucide-react"
+import { Menu, X, ChevronDown, Twitch, LayoutDashboard, LogOut } from "lucide-react"
 import { LazyMotion, domAnimation, m, AnimatePresence } from "framer-motion"
+import { useSession, signOut } from "next-auth/react"
 import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants"
 import { mainNavItems } from "@/data/navigation"
 import { cn } from "@/lib/utils"
@@ -15,6 +16,8 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const isAdmin = session?.user?.role === "ADMIN"
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -112,12 +115,33 @@ export default function Header() {
                 <span>Live</span>
               </a>
 
-              <Link
-                href="/login"
-                className="hidden sm:inline-flex items-center rounded-lg bg-gradient-to-r from-purple-600 to-purple-500 px-4 py-1.5 text-sm font-semibold text-white shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all"
-              >
-                Anmelden
-              </Link>
+              {session ? (
+                <div className="hidden sm:flex items-center gap-2">
+                  {isAdmin && (
+                    <Link
+                      href="/dashboard"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-white/5 border border-white/10 px-3 py-1.5 text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                    >
+                      <LayoutDashboard className="h-3.5 w-3.5" />
+                      Dashboard
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-white/5 border border-white/10 px-3 py-1.5 text-sm font-medium text-white/70 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    Abmelden
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="hidden sm:inline-flex items-center rounded-lg bg-gradient-to-r from-purple-600 to-purple-500 px-4 py-1.5 text-sm font-semibold text-white shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all"
+                >
+                  Anmelden
+                </Link>
+              )}
 
               {/* Mobile toggle */}
               <button

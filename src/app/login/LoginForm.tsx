@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { LazyMotion, domAnimation, m } from "framer-motion"
 import { Mail, Lock, Chrome, MessageCircle, Tv } from "lucide-react"
@@ -19,6 +20,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,7 +37,15 @@ export default function LoginForm() {
       if (result?.error) {
         setError("Ungueltige Anmeldedaten. Bitte versuche es erneut.")
       } else {
-        window.location.href = "/"
+        // Fetch session to check role, then redirect
+        const res = await fetch("/api/auth/session")
+        const session = await res.json()
+        if (session?.user?.role === "ADMIN") {
+          router.push("/dashboard")
+        } else {
+          router.push("/")
+        }
+        router.refresh()
       }
     } catch {
       setError("Ein Fehler ist aufgetreten. Bitte versuche es erneut.")
