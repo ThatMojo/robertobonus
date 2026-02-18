@@ -113,27 +113,6 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Stats bar */}
-        <AnimatedSection delay={0.6}>
-          <div className="mt-16 lg:mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { value: "50+", label: "Casino Deals" },
-              { value: "24/7", label: "Live Streams" },
-              { value: "100%", label: "Exclusive" },
-              { value: "10k+", label: "Community" },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm rounded-2xl px-6 py-5 text-center"
-              >
-                <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-400 to-violet-300 bg-clip-text text-transparent">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </AnimatedSection>
       </div>
 
       {/* Bottom gradient fade */}
