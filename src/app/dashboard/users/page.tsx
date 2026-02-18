@@ -1,18 +1,19 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import {
   Users,
   Search,
   Trophy,
   GitBranch,
   TrendingUp,
-  ChevronDown,
   Edit2,
   ShieldCheck,
+  ChevronDown,
 } from "lucide-react"
 import { useDashboardLang } from "../DashboardLangContext"
 import { t } from "../translations"
+import { getUsers, updateUserRole, updateUserPoints } from "../actions/users"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Table,
@@ -22,9 +23,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 // ─────────────────────────────────────────────
 // Types
@@ -32,111 +47,24 @@ import { Input } from "@/components/ui/input"
 
 type Role = "ADMIN" | "USER"
 
-interface User {
+interface UserData {
   id: string
-  name: string
+  name: string | null
   email: string
   role: Role
   points: number
   referralCode: string
-  referrals: number
-  joinedAt: string
+  referredBy: string | null
+  createdAt: Date
+  _count: { referrals: number }
 }
-
-// ─────────────────────────────────────────────
-// Mock data
-// ─────────────────────────────────────────────
-
-const mockUsers: User[] = [
-  {
-    id: "1",
-    name: "Roberto",
-    email: "roberto@example.com",
-    role: "ADMIN",
-    points: 5200,
-    referralCode: "ROBERTO2024",
-    referrals: 24,
-    joinedAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    name: "MaxMustermann",
-    email: "max@example.com",
-    role: "USER",
-    points: 1850,
-    referralCode: "MAX123",
-    referrals: 8,
-    joinedAt: "2024-03-22",
-  },
-  {
-    id: "3",
-    name: "LauraGaming",
-    email: "laura@example.com",
-    role: "USER",
-    points: 3100,
-    referralCode: "LAURA99",
-    referrals: 15,
-    joinedAt: "2024-02-10",
-  },
-  {
-    id: "4",
-    name: "CasinoKing",
-    email: "king@example.com",
-    role: "USER",
-    points: 920,
-    referralCode: "KING777",
-    referrals: 3,
-    joinedAt: "2024-05-01",
-  },
-  {
-    id: "5",
-    name: "BonusHunter",
-    email: "hunter@example.com",
-    role: "USER",
-    points: 2400,
-    referralCode: "HUNT100",
-    referrals: 11,
-    joinedAt: "2024-04-18",
-  },
-  {
-    id: "6",
-    name: "SpinMaster",
-    email: "spin@example.com",
-    role: "USER",
-    points: 680,
-    referralCode: "SPIN88",
-    referrals: 2,
-    joinedAt: "2024-06-05",
-  },
-  {
-    id: "7",
-    name: "LuckyDice",
-    email: "lucky@example.com",
-    role: "USER",
-    points: 1200,
-    referralCode: "LUCKY7",
-    referrals: 6,
-    joinedAt: "2024-03-30",
-  },
-  {
-    id: "8",
-    name: "SlotFan",
-    email: "slots@example.com",
-    role: "USER",
-    points: 450,
-    referralCode: "SLOTS22",
-    referrals: 1,
-    joinedAt: "2024-07-12",
-  },
-]
 
 // ─────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────
 
-function formatDate(iso: string): string {
-  const date = new Date(iso)
-  return date.toLocaleDateString("de-DE", {
+function formatDate(date: Date, lang: "de" | "en"): string {
+  return new Date(date).toLocaleDateString(lang === "de" ? "de-DE" : "en-US", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -198,25 +126,78 @@ function StatCard({
 
 export default function UsersPage() {
   const { lang } = useDashboardLang()
+  const [users, setUsers] = useState<UserData[]>([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
+
+  // Points dialog
+  const [pointsDialogOpen, setPointsDialogOpen] = useState(false)
+  const [editingUser, setEditingUser] = useState<UserData | null>(null)
+  const [pointsInput, setPointsInput] = useState("")
+  const [saving, setSaving] = useState(false)
+
+  // Load users from DB
+  useEffect(() => {
+    getUsers().then((data) => {
+      setUsers(data as UserData[])
+      setLoading(false)
+    })
+  }, [])
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()
-    if (!q) return mockUsers
-    return mockUsers.filter(
+    if (!q) return users
+    return users.filter(
       (u) =>
-        u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+        (u.name || "").toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q)
     )
-  }, [search])
+  }, [search, users])
 
   const sortedByReferrals = useMemo(
-    () => [...mockUsers].sort((a, b) => b.referrals - a.referrals),
-    []
+    () => [...users].sort((a, b) => b._count.referrals - a._count.referrals),
+    [users]
   )
 
-  const totalReferrals = mockUsers.reduce((acc, u) => acc + u.referrals, 0)
+  const totalReferrals = users.reduce((acc, u) => acc + u._count.referrals, 0)
   const topReferrer = sortedByReferrals[0]
-  const avgReferrals = (totalReferrals / mockUsers.length).toFixed(2)
+  const avgReferrals = users.length > 0
+    ? (totalReferrals / users.length).toFixed(2)
+    : "0"
+
+  // ── Role change handler ──
+  async function handleRoleChange(user: UserData, newRole: Role) {
+    const result = await updateUserRole(user.id, newRole)
+    if (result.success) {
+      setUsers((prev) =>
+        prev.map((u) => (u.id === user.id ? { ...u, role: newRole } : u))
+      )
+    }
+  }
+
+  // ── Points dialog handlers ──
+  function openPointsDialog(user: UserData) {
+    setEditingUser(user)
+    setPointsInput(String(user.points))
+    setPointsDialogOpen(true)
+  }
+
+  async function savePoints() {
+    if (!editingUser) return
+    const parsed = parseInt(pointsInput)
+    if (isNaN(parsed) || parsed < 0) return
+    setSaving(true)
+    const result = await updateUserPoints(editingUser.id, parsed)
+    if (result.success) {
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === editingUser.id ? { ...u, points: parsed } : u
+        )
+      )
+      setPointsDialogOpen(false)
+    }
+    setSaving(false)
+  }
 
   return (
     <div className="min-h-full p-6 lg:p-8">
@@ -231,7 +212,7 @@ export default function UsersPage() {
               {t.users.title[lang]}
             </h1>
             <p className="text-sm text-white/40">
-              {mockUsers.length} {t.users.totalUsers[lang]}
+              {loading ? "..." : users.length} {t.users.totalUsers[lang]}
             </p>
           </div>
         </div>
@@ -292,12 +273,20 @@ export default function UsersPage() {
                     {t.users.joinedAt[lang]}
                   </TableHead>
                   <TableHead className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-white/40">
-                    {t.users.roleAction[lang]}
+                    {lang === "de" ? "Aktionen" : "Actions"}
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.length === 0 ? (
+                {loading ? (
+                  [1, 2, 3].map((i) => (
+                    <TableRow key={i} className="border-white/10">
+                      <TableCell colSpan={7} className="px-4 py-4">
+                        <div className="h-6 animate-pulse rounded bg-white/5" />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : filtered.length === 0 ? (
                   <TableRow className="border-white/10 hover:bg-white/5">
                     <TableCell
                       colSpan={7}
@@ -312,56 +301,76 @@ export default function UsersPage() {
                       key={user.id}
                       className="border-white/10 transition-colors hover:bg-white/5"
                     >
-                      {/* Benutzer */}
                       <TableCell className="px-4 py-3">
                         <div>
                           <p className="text-sm font-medium text-white">
-                            {user.name}
+                            {user.name || "—"}
                           </p>
                           <p className="text-xs text-white/40">{user.email}</p>
                         </div>
                       </TableCell>
 
-                      {/* Rolle */}
                       <TableCell className="px-4 py-3">
                         <RoleBadge role={user.role} />
                       </TableCell>
 
-                      {/* Punkte */}
                       <TableCell className="px-4 py-3 text-right text-sm font-medium text-white">
                         {formatPoints(user.points)}
                       </TableCell>
 
-                      {/* Referral Code */}
                       <TableCell className="px-4 py-3">
                         <span className="font-mono text-sm text-purple-400">
                           {user.referralCode}
                         </span>
                       </TableCell>
 
-                      {/* Referrals */}
                       <TableCell className="px-4 py-3 text-right text-sm text-white/70">
-                        {user.referrals}
+                        {user._count.referrals}
                       </TableCell>
 
-                      {/* Beigetreten */}
                       <TableCell className="px-4 py-3 text-sm text-white/50">
-                        {formatDate(user.joinedAt)}
+                        {formatDate(user.createdAt, lang)}
                       </TableCell>
 
-                      {/* Aktionen */}
                       <TableCell className="px-4 py-3">
                         <div className="flex items-center justify-end gap-2">
+                          {/* Role dropdown */}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                size="sm"
+                                className="h-7 gap-1.5 border border-white/10 bg-white/[0.03] px-2.5 text-xs text-white/60 hover:border-purple-500/30 hover:bg-purple-500/10 hover:text-purple-400"
+                              >
+                                <ShieldCheck className="h-3 w-3" />
+                                {t.users.roleAction[lang]}
+                                <ChevronDown className="h-3 w-3" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                              align="end"
+                              className="border-white/10 bg-[#1a1030]"
+                            >
+                              <DropdownMenuItem
+                                onClick={() => handleRoleChange(user, "USER")}
+                                className={`text-sm ${user.role === "USER" ? "text-purple-400" : "text-white/70"} hover:bg-white/10 focus:bg-white/10 focus:text-white`}
+                              >
+                                User
+                                {user.role === "USER" && " ✓"}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleRoleChange(user, "ADMIN")}
+                                className={`text-sm ${user.role === "ADMIN" ? "text-purple-400" : "text-white/70"} hover:bg-white/10 focus:bg-white/10 focus:text-white`}
+                              >
+                                Admin
+                                {user.role === "ADMIN" && " ✓"}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+
+                          {/* Points button */}
                           <Button
                             size="sm"
-                            className="h-7 gap-1.5 border border-white/10 bg-white/[0.03] px-2.5 text-xs text-white/60 hover:border-purple-500/30 hover:bg-purple-500/10 hover:text-purple-400"
-                          >
-                            <ShieldCheck className="h-3 w-3" />
-                            {t.users.roleAction[lang]}
-                            <ChevronDown className="h-3 w-3" />
-                          </Button>
-                          <Button
-                            size="sm"
+                            onClick={() => openPointsDialog(user)}
                             className="h-7 gap-1.5 border border-white/10 bg-white/[0.03] px-2.5 text-xs text-white/60 hover:border-purple-500/30 hover:bg-purple-500/10 hover:text-purple-400"
                           >
                             <Edit2 className="h-3 w-3" />
@@ -376,9 +385,10 @@ export default function UsersPage() {
             </Table>
           </div>
 
-          {filtered.length > 0 && (
+          {!loading && filtered.length > 0 && (
             <p className="mt-3 text-right text-xs text-white/30">
-              {filtered.length} {t.users.countOf[lang]} {mockUsers.length} {t.users.usersLabel[lang]}
+              {filtered.length} {t.users.countOf[lang]} {users.length}{" "}
+              {t.users.usersLabel[lang]}
             </p>
           )}
         </TabsContent>
@@ -390,19 +400,19 @@ export default function UsersPage() {
             <StatCard
               icon={GitBranch}
               label={t.users.totalReferrals[lang]}
-              value={totalReferrals}
+              value={loading ? "..." : totalReferrals}
               sub={t.users.acrossAllUsers[lang]}
             />
             <StatCard
               icon={Trophy}
               label={t.users.topReferrers[lang]}
-              value={topReferrer.name}
-              sub={`${topReferrer.referrals} ${t.users.referrals[lang]}`}
+              value={loading ? "..." : topReferrer?.name || topReferrer?.email || "—"}
+              sub={topReferrer ? `${topReferrer._count.referrals} ${t.users.referrals[lang]}` : ""}
             />
             <StatCard
               icon={TrendingUp}
               label={t.users.average[lang]}
-              value={avgReferrals}
+              value={loading ? "..." : avgReferrals}
               sub={t.users.perUser[lang]}
             />
           </div>
@@ -435,93 +445,141 @@ export default function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sortedByReferrals.map((user, index) => {
-                  const rank = index + 1
-                  const isTopThree = rank <= 3
-
-                  return (
-                    <TableRow
-                      key={user.id}
-                      className="relative border-white/10 transition-colors hover:bg-white/5"
-                      style={
-                        isTopThree
-                          ? {
-                              boxShadow: "inset 3px 0 0 0 rgba(168,85,247,0.5)",
-                            }
-                          : undefined
-                      }
-                    >
-                      {/* Rang */}
-                      <TableCell className="px-4 py-3">
-                        <span
-                          className={
-                            rank === 1
-                              ? "text-sm font-bold text-purple-400"
-                              : rank === 2
-                                ? "text-sm font-semibold text-white/70"
-                                : rank === 3
-                                  ? "text-sm font-semibold text-white/50"
-                                  : "text-sm text-white/30"
-                          }
-                        >
-                          {rank === 1
-                            ? "1."
-                            : rank === 2
-                              ? "2."
-                              : rank === 3
-                                ? "3."
-                                : `${rank}.`}
-                        </span>
-                      </TableCell>
-
-                      {/* Benutzer */}
-                      <TableCell className="px-4 py-3">
-                        <div>
-                          <p
-                            className={
-                              isTopThree
-                                ? "text-sm font-medium text-white"
-                                : "text-sm text-white/80"
-                            }
-                          >
-                            {user.name}
-                          </p>
-                          <p className="text-xs text-white/40">{user.email}</p>
-                        </div>
-                      </TableCell>
-
-                      {/* Referral Code */}
-                      <TableCell className="px-4 py-3">
-                        <span className="font-mono text-sm text-purple-400">
-                          {user.referralCode}
-                        </span>
-                      </TableCell>
-
-                      {/* Anzahl Referrals */}
-                      <TableCell className="px-4 py-3 text-right">
-                        <span
-                          className={
-                            isTopThree
-                              ? "text-sm font-semibold text-white"
-                              : "text-sm text-white/60"
-                          }
-                        >
-                          {user.referrals}
-                        </span>
-                      </TableCell>
-
-                      {/* Punkte */}
-                      <TableCell className="px-4 py-3 text-right text-sm text-white/50">
-                        {formatPoints(user.points)}
+                {loading ? (
+                  [1, 2, 3].map((i) => (
+                    <TableRow key={i} className="border-white/10">
+                      <TableCell colSpan={5} className="px-4 py-4">
+                        <div className="h-6 animate-pulse rounded bg-white/5" />
                       </TableCell>
                     </TableRow>
-                  )
-                })}
+                  ))
+                ) : (
+                  sortedByReferrals.map((user, index) => {
+                    const rank = index + 1
+                    const isTopThree = rank <= 3
+
+                    return (
+                      <TableRow
+                        key={user.id}
+                        className="relative border-white/10 transition-colors hover:bg-white/5"
+                        style={
+                          isTopThree
+                            ? {
+                                boxShadow:
+                                  "inset 3px 0 0 0 rgba(168,85,247,0.5)",
+                              }
+                            : undefined
+                        }
+                      >
+                        <TableCell className="px-4 py-3">
+                          <span
+                            className={
+                              rank === 1
+                                ? "text-sm font-bold text-purple-400"
+                                : rank <= 3
+                                  ? "text-sm font-semibold text-white/70"
+                                  : "text-sm text-white/30"
+                            }
+                          >
+                            {rank}.
+                          </span>
+                        </TableCell>
+
+                        <TableCell className="px-4 py-3">
+                          <div>
+                            <p
+                              className={
+                                isTopThree
+                                  ? "text-sm font-medium text-white"
+                                  : "text-sm text-white/80"
+                              }
+                            >
+                              {user.name || "—"}
+                            </p>
+                            <p className="text-xs text-white/40">
+                              {user.email}
+                            </p>
+                          </div>
+                        </TableCell>
+
+                        <TableCell className="px-4 py-3">
+                          <span className="font-mono text-sm text-purple-400">
+                            {user.referralCode}
+                          </span>
+                        </TableCell>
+
+                        <TableCell className="px-4 py-3 text-right">
+                          <span
+                            className={
+                              isTopThree
+                                ? "text-sm font-semibold text-white"
+                                : "text-sm text-white/60"
+                            }
+                          >
+                            {user._count.referrals}
+                          </span>
+                        </TableCell>
+
+                        <TableCell className="px-4 py-3 text-right text-sm text-white/50">
+                          {formatPoints(user.points)}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })
+                )}
               </TableBody>
             </Table>
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* ── Points Dialog ─────────────────────────── */}
+      <Dialog open={pointsDialogOpen} onOpenChange={setPointsDialogOpen}>
+        <DialogContent className="border-white/10 bg-[#1a1030] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              {t.users.pointsAction[lang]}
+              {editingUser && (
+                <span className="ml-2 text-sm font-normal text-white/50">
+                  — {editingUser.name || editingUser.email}
+                </span>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label className="text-white/70">{t.users.points[lang]}</Label>
+              <Input
+                type="number"
+                min={0}
+                value={pointsInput}
+                onChange={(e) => setPointsInput(e.target.value)}
+                className="border-white/10 bg-white/5 text-white"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setPointsDialogOpen(false)}
+              className="border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+            >
+              {t.deals.cancel[lang]}
+            </Button>
+            <Button
+              onClick={savePoints}
+              disabled={saving}
+              className="bg-purple-600 text-white hover:bg-purple-500"
+            >
+              {saving
+                ? "..."
+                : t.deals.save[lang]}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
