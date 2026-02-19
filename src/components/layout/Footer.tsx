@@ -15,10 +15,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
         {/* Brand */}
         <div className="flex flex-col items-center text-center gap-4">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center font-bold text-white text-sm shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-              S
-            </div>
+          <Link href="/" className="inline-flex items-center">
             <span className="text-lg font-bold bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 bg-clip-text text-transparent">
               {SITE_NAME}
             </span>

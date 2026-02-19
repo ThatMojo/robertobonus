@@ -3,6 +3,7 @@ import HeroSection from "@/components/sections/HeroSection"
 import NewsBanner from "@/components/sections/NewsBanner"
 import DealsSection from "@/components/sections/DealsSection"
 import FAQSection from "@/components/sections/FAQSection"
+import MerkurInfoSection from "@/components/sections/MerkurInfoSection"
 import ParticleZone from "@/components/shared/ParticleZone"
 export const metadata = {
   title: `${SITE_NAME} | The Best Casino Bonus Offers`,
@@ -19,6 +20,7 @@ export default function HomePage() {
       <HeroSection />
       <NewsBanner />
       <DealsSection />
+      <MerkurInfoSection />
       <FAQSection />
     </ParticleZone>
   )
