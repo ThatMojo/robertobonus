@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react"
 import Image from "next/image"
-import { Plus, Search, Pencil, Trash2, X, Save, Upload, ImageIcon } from "lucide-react"
+import { Plus, Search, Pencil, Trash2, X, Save, Upload } from "lucide-react"
 import { casinos, type CasinoBonus } from "@/data/casinos"
 import {
   Table,

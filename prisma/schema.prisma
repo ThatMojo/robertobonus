@@ -34,20 +34,24 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role      @default(USER)
-  points        Int       @default(0)
-  referralCode  String    @unique @default(cuid())
-  referredBy    String?
-  accounts      Account[]
-  sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              String         @id @default(cuid())
+  name            String?
+  email           String         @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  role            Role           @default(USER)
+  points          Int            @default(0)
+  referralCode    String         @unique @default(cuid())
+  referredBy      String?
+  lastDailyLogin  DateTime?
+  accounts        Account[]
+  sessions        Session[]
+  favorites       Favorite[]
+  pointsLog       PointsLog[]
+  notifications   Notification[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 }
 
 model VerificationToken {
@@ -64,10 +68,10 @@ enum Role {
 }
 
 model Deal {
-  id              String   @id @default(cuid())
+  id              String     @id @default(cuid())
   rank            Int
   name            String
-  slug            String   @unique
+  slug            String     @unique
   logo            String
   bonusPercent    Int
   bonusType       String
@@ -79,13 +83,14 @@ model Deal {
   features        String[]
   promoCode       String?
   affiliateUrl    String
-  hasMerkur       Boolean  @default(false)
-  hasNovoline     Boolean  @default(false)
-  isExclusive     Boolean  @default(false)
+  hasMerkur       Boolean    @default(false)
+  hasNovoline     Boolean    @default(false)
+  isExclusive     Boolean    @default(false)
   badgeText       String?
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  isActive        Boolean    @default(true)
+  favorites       Favorite[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
 
 model BonusHunt {
@@ -105,4 +110,38 @@ model SiteSettings {
   id              String  @id @default("main")
   dashboardActive Boolean @default(true)
   maintenanceMode Boolean @default(false)
+}
+
+// ── User Features ──────────────────────────────
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  dealId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deal      Deal     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, dealId])
+}
+
+model PointsLog {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int
+  reason    String   // "daily_login", "referral_bonus", "registration", "admin_grant"
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String   // "new_deal", "stream_live", "points_earned", "welcome"
+  isRead    Boolean  @default(false)
+  link      String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }

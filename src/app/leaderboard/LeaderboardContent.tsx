@@ -1,6 +1,7 @@
 "use client"
 
-import { Trophy, Crown, Medal, Star, TrendingUp } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Trophy, Crown, Medal, Star, TrendingUp, Users } from "lucide-react"
 import AnimatedSection from "@/components/shared/AnimatedSection"
 import GlassCard from "@/components/shared/GlassCard"
 import { Badge } from "@/components/ui/badge"
@@ -12,39 +13,52 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-const sampleUsers = [
-  { rank: 1, name: "MaxBet_King", points: 4250, wins: 18, joined: "2024-06" },
-  { rank: 2, name: "SlotHunter_DE", points: 3890, wins: 15, joined: "2024-07" },
-  { rank: 3, name: "CasinoRoyal99", points: 3420, wins: 12, joined: "2024-05" },
-  { rank: 4, name: "LuckyLady777", points: 2980, wins: 11, joined: "2024-08" },
-  { rank: 5, name: "BonusJäger", points: 2650, wins: 9, joined: "2024-07" },
-  { rank: 6, name: "MerkurFan_01", points: 2340, wins: 8, joined: "2024-09" },
-  { rank: 7, name: "SpinMaster_X", points: 2100, wins: 7, joined: "2024-06" },
-  { rank: 8, name: "NovoExpert", points: 1870, wins: 6, joined: "2024-10" },
-  { rank: 9, name: "HighRoller_DE", points: 1540, wins: 5, joined: "2024-08" },
-  { rank: 10, name: "FreiSpielKing", points: 1200, wins: 4, joined: "2024-11" },
-]
+import { getLeaderboard, type LeaderboardUser } from "./actions"
 
 function formatNumber(n: number) {
   return n.toLocaleString("de-DE")
 }
 
-function formatJoined(dateStr: string) {
-  const [year, month] = dateStr.split("-")
-  const date = new Date(Number(year), Number(month) - 1)
-  return date.toLocaleDateString("de-DE", { month: "long", year: "numeric" })
+function formatDate(date: Date) {
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  })
 }
 
 function getInitial(name: string) {
   return name.charAt(0).toUpperCase()
 }
 
+function SkeletonPodiumCard({ isCenter }: { isCenter?: boolean }) {
+  return (
+    <div
+      className={`flex flex-col items-center ${
+        isCenter ? "order-2 md:-mt-6" : "order-1 md:mt-4"
+      }`}
+    >
+      <GlassCard className="relative p-6 sm:p-8 text-center w-full animate-pulse">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <div className="h-6 w-8 rounded-full bg-white/10" />
+        </div>
+        <div
+          className={`mx-auto rounded-full bg-white/10 ${
+            isCenter ? "w-20 h-20 mb-6" : "w-16 h-16 mb-4"
+          }`}
+        />
+        <div className="h-4 w-24 mx-auto bg-white/10 rounded mb-3" />
+        <div className="h-4 w-16 mx-auto bg-white/10 rounded mb-2" />
+        <div className="h-3 w-12 mx-auto bg-white/10 rounded" />
+      </GlassCard>
+    </div>
+  )
+}
+
 function PodiumCard({
   user,
   position,
 }: {
-  user: (typeof sampleUsers)[0]
+  user: LeaderboardUser
   position: "left" | "center" | "right"
 }) {
   const isFirst = position === "center"
@@ -67,7 +81,11 @@ function PodiumCard({
   return (
     <div
       className={`flex flex-col items-center ${
-        isFirst ? "order-2 md:-mt-6" : position === "left" ? "order-1 md:mt-4" : "order-3 md:mt-4"
+        isFirst
+          ? "order-2 md:-mt-6"
+          : position === "left"
+          ? "order-1 md:mt-4"
+          : "order-3 md:mt-4"
       }`}
     >
       <GlassCard
@@ -122,11 +140,11 @@ function PodiumCard({
           <span className="text-gray-500 text-sm">Points</span>
         </div>
 
-        {/* Wins */}
+        {/* Referrals */}
         <div className="mt-1 flex items-center justify-center gap-1.5">
-          <Trophy className="w-4 h-4 text-purple-400/60" />
+          <Users className="w-4 h-4 text-purple-400/60" />
           <span className="text-gray-400 text-sm">
-            {user.wins} Wins
+            {user.referralCount} Referrals
           </span>
         </div>
       </GlassCard>
@@ -134,10 +152,39 @@ function PodiumCard({
   )
 }
 
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center py-24 text-center">
+      <div className="w-16 h-16 rounded-full bg-purple-500/10 flex items-center justify-center mb-4">
+        <Trophy className="w-8 h-8 text-purple-400/50" />
+      </div>
+      <h3 className="text-lg font-semibold text-white mb-2">No rankings yet</h3>
+      <p className="text-gray-400 max-w-sm">
+        No rankings yet. Be the first to earn points!
+      </p>
+    </div>
+  )
+}
+
 export default function LeaderboardContent() {
-  const top3 = sampleUsers.slice(0, 3)
-  // Podium order: 2nd, 1st, 3rd
-  const podiumOrder = [top3[1], top3[0], top3[2]]
+  const [users, setUsers] = useState<LeaderboardUser[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getLeaderboard()
+      .then(setUsers)
+      .finally(() => setLoading(false))
+  }, [])
+
+  const top3 = users.slice(0, 3)
+  // Podium order: 2nd (left), 1st (center), 3rd (right)
+  const podiumOrder: [LeaderboardUser | undefined, LeaderboardUser | undefined, LeaderboardUser | undefined] = [
+    top3[1],
+    top3[0],
+    top3[2],
+  ]
+
+  const hasData = users.length > 0
 
   return (
     <section className="relative py-20 sm:py-24">
@@ -164,125 +211,171 @@ export default function LeaderboardContent() {
           </p>
         </AnimatedSection>
 
-        {/* Top 3 Podium */}
-        <AnimatedSection delay={0.15} className="mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-end">
-            <PodiumCard user={podiumOrder[0]} position="left" />
-            <PodiumCard user={podiumOrder[1]} position="center" />
-            <PodiumCard user={podiumOrder[2]} position="right" />
-          </div>
-        </AnimatedSection>
+        {loading ? (
+          <>
+            {/* Skeleton podium */}
+            <AnimatedSection delay={0.15} className="mb-16">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-end">
+                <SkeletonPodiumCard />
+                <SkeletonPodiumCard isCenter />
+                <SkeletonPodiumCard />
+              </div>
+            </AnimatedSection>
 
-        {/* Full leaderboard table */}
-        <AnimatedSection delay={0.3}>
-          <GlassCard className="p-4 sm:p-6">
-            <div className="flex items-center gap-2 mb-6">
-              <TrendingUp className="w-5 h-5 text-purple-400" />
-              <h2 className="text-lg sm:text-xl font-bold text-white">
-                Full Rankings
-              </h2>
-            </div>
+            {/* Skeleton table */}
+            <AnimatedSection delay={0.3}>
+              <GlassCard className="p-4 sm:p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <TrendingUp className="w-5 h-5 text-purple-400" />
+                  <h2 className="text-lg sm:text-xl font-bold text-white">
+                    Full Rankings
+                  </h2>
+                </div>
+                <div className="space-y-3 animate-pulse">
+                  {Array.from({ length: 7 }).map((_, i) => (
+                    <div key={i} className="h-12 rounded-lg bg-white/5" />
+                  ))}
+                </div>
+              </GlassCard>
+            </AnimatedSection>
+          </>
+        ) : !hasData ? (
+          <AnimatedSection delay={0.15}>
+            <GlassCard className="p-8">
+              <EmptyState />
+            </GlassCard>
+          </AnimatedSection>
+        ) : (
+          <>
+            {/* Top 3 Podium */}
+            <AnimatedSection delay={0.15} className="mb-16">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-end">
+                {podiumOrder[0] && (
+                  <PodiumCard user={podiumOrder[0]} position="left" />
+                )}
+                {podiumOrder[1] && (
+                  <PodiumCard user={podiumOrder[1]} position="center" />
+                )}
+                {podiumOrder[2] && (
+                  <PodiumCard user={podiumOrder[2]} position="right" />
+                )}
+              </div>
+            </AnimatedSection>
 
-            <Table>
-              <TableHeader>
-                <TableRow className="border-white/10 hover:bg-transparent">
-                  <TableHead className="text-purple-300 font-semibold">
-                    Rank
-                  </TableHead>
-                  <TableHead className="text-purple-300 font-semibold">
-                    Name
-                  </TableHead>
-                  <TableHead className="text-purple-300 font-semibold text-right">
-                    Points
-                  </TableHead>
-                  <TableHead className="text-purple-300 font-semibold text-right">
-                    Wins
-                  </TableHead>
-                  <TableHead className="text-purple-300 font-semibold text-right hidden sm:table-cell">
-                    Member Since
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sampleUsers.map((user) => {
-                  const isTop3 = user.rank <= 3
-                  return (
-                    <TableRow
-                      key={user.rank}
-                      className={`border-white/5 transition-colors ${
-                        isTop3
-                          ? "bg-purple-500/5 hover:bg-purple-500/10"
-                          : "hover:bg-white/5"
-                      }`}
-                    >
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {user.rank === 1 && (
-                            <Crown className="w-4 h-4 text-purple-400" />
-                          )}
-                          {user.rank === 2 && (
-                            <Medal className="w-4 h-4 text-gray-400" />
-                          )}
-                          {user.rank === 3 && (
-                            <Medal className="w-4 h-4 text-amber-500" />
-                          )}
-                          <span
-                            className={`font-bold ${
-                              isTop3 ? "text-purple-300" : "text-gray-400"
-                            }`}
-                          >
-                            {user.rank}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white ${
-                              user.rank === 1
-                                ? "bg-gradient-to-br from-purple-500 to-violet-400"
-                                : user.rank === 2
-                                ? "bg-gradient-to-br from-gray-400 to-gray-500"
-                                : user.rank === 3
-                                ? "bg-gradient-to-br from-amber-600 to-amber-500"
-                                : "bg-white/10"
-                            }`}
-                          >
-                            {getInitial(user.name)}
-                          </div>
-                          <span
-                            className={`font-medium ${
-                              isTop3 ? "text-white" : "text-gray-300"
-                            }`}
-                          >
-                            {user.name}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <span
-                          className={`font-semibold ${
-                            isTop3 ? "text-purple-300" : "text-gray-400"
+            {/* Full leaderboard table */}
+            <AnimatedSection delay={0.3}>
+              <GlassCard className="p-4 sm:p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <TrendingUp className="w-5 h-5 text-purple-400" />
+                  <h2 className="text-lg sm:text-xl font-bold text-white">
+                    Full Rankings
+                  </h2>
+                </div>
+
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-white/10 hover:bg-transparent">
+                      <TableHead className="text-purple-300 font-semibold">
+                        Rank
+                      </TableHead>
+                      <TableHead className="text-purple-300 font-semibold">
+                        Name
+                      </TableHead>
+                      <TableHead className="text-purple-300 font-semibold text-right">
+                        Points
+                      </TableHead>
+                      <TableHead className="text-purple-300 font-semibold text-right">
+                        Referrals
+                      </TableHead>
+                      <TableHead className="text-purple-300 font-semibold text-right hidden sm:table-cell">
+                        Member Since
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {users.map((user) => {
+                      const isTop3 = user.rank <= 3
+                      return (
+                        <TableRow
+                          key={user.id}
+                          className={`border-white/5 transition-colors ${
+                            isTop3
+                              ? "bg-purple-500/5 hover:bg-purple-500/10"
+                              : "hover:bg-white/5"
                           }`}
                         >
-                          {formatNumber(user.points)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <span className="text-gray-400">{user.wins}</span>
-                      </TableCell>
-                      <TableCell className="text-right hidden sm:table-cell">
-                        <span className="text-gray-500 text-sm">
-                          {formatJoined(user.joined)}
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </GlassCard>
-        </AnimatedSection>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {user.rank === 1 && (
+                                <Crown className="w-4 h-4 text-purple-400" />
+                              )}
+                              {user.rank === 2 && (
+                                <Medal className="w-4 h-4 text-gray-400" />
+                              )}
+                              {user.rank === 3 && (
+                                <Medal className="w-4 h-4 text-amber-500" />
+                              )}
+                              <span
+                                className={`font-bold ${
+                                  isTop3 ? "text-purple-300" : "text-gray-400"
+                                }`}
+                              >
+                                {user.rank}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white ${
+                                  user.rank === 1
+                                    ? "bg-gradient-to-br from-purple-500 to-violet-400"
+                                    : user.rank === 2
+                                    ? "bg-gradient-to-br from-gray-400 to-gray-500"
+                                    : user.rank === 3
+                                    ? "bg-gradient-to-br from-amber-600 to-amber-500"
+                                    : "bg-white/10"
+                                }`}
+                              >
+                                {getInitial(user.name)}
+                              </div>
+                              <span
+                                className={`font-medium ${
+                                  isTop3 ? "text-white" : "text-gray-300"
+                                }`}
+                              >
+                                {user.name}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <span
+                              className={`font-semibold ${
+                                isTop3 ? "text-purple-300" : "text-gray-400"
+                              }`}
+                            >
+                              {formatNumber(user.points)}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <span className="text-gray-400">
+                              {user.referralCount}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-right hidden sm:table-cell">
+                            <span className="text-gray-500 text-sm">
+                              {formatDate(user.createdAt)}
+                            </span>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
+                  </TableBody>
+                </Table>
+              </GlassCard>
+            </AnimatedSection>
+          </>
+        )}
 
         {/* Bottom note */}
         <AnimatedSection delay={0.4}>

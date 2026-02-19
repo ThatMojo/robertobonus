@@ -10,6 +10,7 @@ import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants"
 import { mainNavItems } from "@/data/navigation"
 import { cn } from "@/lib/utils"
 import MobileMenu from "./MobileMenu"
+import NotificationBell from "@/components/shared/NotificationBell"
 
 function useTwitchLive() {
   const [live, setLive] = useState(false)
@@ -165,6 +166,7 @@ export default function Header() {
             <div className="flex items-center gap-2">
               {session ? (
                 <div className="hidden sm:flex items-center gap-2">
+                  <NotificationBell />
                   {isAdmin && (
                     <Link
                       href="/dashboard"
