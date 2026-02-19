@@ -10,10 +10,12 @@ import {
   Edit2,
   ShieldCheck,
   ChevronDown,
+  KeyRound,
+  UserPlus,
 } from "lucide-react"
 import { useDashboardLang } from "../DashboardLangContext"
 import { t } from "../translations"
-import { getUsers, updateUserRole, updateUserPoints } from "../actions/users"
+import { getUsers, updateUserRole, updateUserPoints, resetUserPassword, createUser } from "../actions/users"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Table,
@@ -136,6 +138,23 @@ export default function UsersPage() {
   const [pointsInput, setPointsInput] = useState("")
   const [saving, setSaving] = useState(false)
 
+  // Password reset dialog
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false)
+  const [passwordUser, setPasswordUser] = useState<UserData | null>(null)
+  const [newPassword, setNewPassword] = useState("")
+  const [passwordSaving, setPasswordSaving] = useState(false)
+  const [passwordSuccess, setPasswordSuccess] = useState(false)
+  const [passwordError, setPasswordError] = useState("")
+
+  // Create user dialog
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const [createName, setCreateName] = useState("")
+  const [createEmail, setCreateEmail] = useState("")
+  const [createPassword, setCreatePassword] = useState("")
+  const [createRole, setCreateRole] = useState<Role>("USER")
+  const [createSaving, setCreateSaving] = useState(false)
+  const [createError, setCreateError] = useState("")
+
   // Load users from DB
   useEffect(() => {
     getUsers().then((data) => {
@@ -199,10 +218,70 @@ export default function UsersPage() {
     setSaving(false)
   }
 
+  // ── Password reset handlers ──
+  function openPasswordDialog(user: UserData) {
+    setPasswordUser(user)
+    setNewPassword("")
+    setPasswordSuccess(false)
+    setPasswordError("")
+    setPasswordDialogOpen(true)
+  }
+
+  async function savePassword() {
+    if (!passwordUser) return
+    if (newPassword.length < 8) {
+      setPasswordError(t.users.passwordMinLength[lang])
+      return
+    }
+    setPasswordSaving(true)
+    setPasswordError("")
+    const result = await resetUserPassword(passwordUser.id, newPassword)
+    if (result.success) {
+      setPasswordSuccess(true)
+      setTimeout(() => setPasswordDialogOpen(false), 1200)
+    } else {
+      setPasswordError(result.error || "Failed")
+    }
+    setPasswordSaving(false)
+  }
+
+  // ── Create user handlers ──
+  async function handleCreateUser() {
+    setCreateError("")
+    if (!createEmail || !createPassword) {
+      setCreateError("Email and password are required")
+      return
+    }
+    if (createPassword.length < 8) {
+      setCreateError(t.users.passwordMinLength[lang])
+      return
+    }
+    setCreateSaving(true)
+    const result = await createUser({
+      name: createName,
+      email: createEmail,
+      password: createPassword,
+      role: createRole,
+    })
+    if (result.success) {
+      // Reload users
+      const data = await getUsers()
+      setUsers(data as UserData[])
+      setCreateDialogOpen(false)
+      setCreateName("")
+      setCreateEmail("")
+      setCreatePassword("")
+      setCreateRole("USER")
+    } else {
+      setCreateError(result.error || "Failed")
+    }
+    setCreateSaving(false)
+  }
+
   return (
     <div className="min-h-full p-6 lg:p-8">
       {/* ── Page header ─────────────────────────── */}
-      <div className="mb-8">
+      <div className="mb-8 flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
             <Users className="h-5 w-5 text-purple-400" />
@@ -216,6 +295,17 @@ export default function UsersPage() {
             </p>
           </div>
         </div>
+
+        <Button
+          onClick={() => {
+            setCreateError("")
+            setCreateDialogOpen(true)
+          }}
+          className="gap-2 bg-purple-600 text-white hover:bg-purple-500"
+        >
+          <UserPlus className="h-4 w-4" />
+          {t.users.createUser[lang]}
+        </Button>
       </div>
 
       {/* ── Tabs ────────────────────────────────── */}
@@ -375,6 +465,16 @@ export default function UsersPage() {
                           >
                             <Edit2 className="h-3 w-3" />
                             {t.users.pointsAction[lang]}
+                          </Button>
+
+                          {/* Password reset button */}
+                          <Button
+                            size="sm"
+                            onClick={() => openPasswordDialog(user)}
+                            className="h-7 gap-1.5 border border-white/10 bg-white/[0.03] px-2.5 text-xs text-white/60 hover:border-amber-500/30 hover:bg-amber-500/10 hover:text-amber-400"
+                          >
+                            <KeyRound className="h-3 w-3" />
+                            {t.users.passwordReset[lang]}
                           </Button>
                         </div>
                       </TableCell>
@@ -576,6 +676,155 @@ export default function UsersPage() {
               {saving
                 ? "..."
                 : t.deals.save[lang]}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Password Reset Dialog ─────────────────── */}
+      <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+        <DialogContent className="border-white/10 bg-[#1a1030] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              {t.users.resetPassword[lang]}
+              {passwordUser && (
+                <span className="ml-2 text-sm font-normal text-white/50">
+                  — {passwordUser.name || passwordUser.email}
+                </span>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label className="text-white/70">{t.users.newPassword[lang]}</Label>
+              <Input
+                type="text"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder={t.users.passwordMinLength[lang]}
+                className="border-white/10 bg-white/5 text-white placeholder:text-white/30"
+              />
+            </div>
+            {passwordError && (
+              <p className="text-sm text-red-400">{passwordError}</p>
+            )}
+            {passwordSuccess && (
+              <p className="text-sm text-emerald-400">
+                {lang === "de" ? "Passwort erfolgreich geändert!" : "Password changed successfully!"}
+              </p>
+            )}
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setPasswordDialogOpen(false)}
+              className="border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+            >
+              {t.deals.cancel[lang]}
+            </Button>
+            <Button
+              onClick={savePassword}
+              disabled={passwordSaving || passwordSuccess}
+              className="bg-amber-600 text-white hover:bg-amber-500"
+            >
+              {passwordSaving ? "..." : t.users.resetPassword[lang]}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Create User Dialog ────────────────────── */}
+      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+        <DialogContent className="border-white/10 bg-[#1a1030] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              {t.users.createUserTitle[lang]}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label className="text-white/70">{t.users.name[lang]}</Label>
+              <Input
+                value={createName}
+                onChange={(e) => setCreateName(e.target.value)}
+                placeholder="Roberto"
+                className="border-white/10 bg-white/5 text-white placeholder:text-white/30"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-white/70">{t.users.emailAddress[lang]}</Label>
+              <Input
+                type="email"
+                value={createEmail}
+                onChange={(e) => setCreateEmail(e.target.value)}
+                placeholder="user@example.com"
+                className="border-white/10 bg-white/5 text-white placeholder:text-white/30"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-white/70">{t.users.password[lang]}</Label>
+              <Input
+                type="text"
+                value={createPassword}
+                onChange={(e) => setCreatePassword(e.target.value)}
+                placeholder={t.users.passwordMinLength[lang]}
+                className="border-white/10 bg-white/5 text-white placeholder:text-white/30"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-white/70">{t.users.selectRole[lang]}</Label>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  onClick={() => setCreateRole("USER")}
+                  className={`flex-1 ${
+                    createRole === "USER"
+                      ? "bg-purple-600 text-white"
+                      : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  User
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setCreateRole("ADMIN")}
+                  className={`flex-1 ${
+                    createRole === "ADMIN"
+                      ? "bg-purple-600 text-white"
+                      : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
+                  Admin
+                </Button>
+              </div>
+            </div>
+
+            {createError && (
+              <p className="text-sm text-red-400">{createError}</p>
+            )}
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setCreateDialogOpen(false)}
+              className="border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+            >
+              {t.deals.cancel[lang]}
+            </Button>
+            <Button
+              onClick={handleCreateUser}
+              disabled={createSaving}
+              className="bg-purple-600 text-white hover:bg-purple-500"
+            >
+              {createSaving ? "..." : t.users.createUser[lang]}
             </Button>
           </DialogFooter>
         </DialogContent>

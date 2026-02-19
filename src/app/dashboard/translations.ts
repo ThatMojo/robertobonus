@@ -123,6 +123,17 @@ export const t = {
     perUser: { de: "pro Benutzer", en: "per user" },
     roleAction: { de: "Rolle", en: "Role" },
     pointsAction: { de: "Punkte", en: "Points" },
+    resetPassword: { de: "Passwort zurücksetzen", en: "Reset Password" },
+    newPassword: { de: "Neues Passwort", en: "New Password" },
+    passwordMinLength: { de: "Mindestens 8 Zeichen", en: "At least 8 characters" },
+    passwordReset: { de: "Passwort", en: "Password" },
+    createUser: { de: "Benutzer erstellen", en: "Create User" },
+    createUserTitle: { de: "Neuen Benutzer erstellen", en: "Create New User" },
+    emailAddress: { de: "E-Mail Adresse", en: "Email Address" },
+    password: { de: "Passwort", en: "Password" },
+    selectRole: { de: "Rolle auswählen", en: "Select Role" },
+    userCreated: { de: "Benutzer erstellt", en: "User created" },
+    errorEmailExists: { de: "E-Mail existiert bereits", en: "Email already exists" },
   },
 } as const
 
