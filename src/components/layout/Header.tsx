@@ -74,8 +74,8 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1">
+            {/* Desktop Nav — disabled for now */}
+            <nav className="hidden items-center gap-1">
               {mainNavItems.map((item) => (
                 <div
                   key={item.label}
@@ -130,7 +130,7 @@ export default function Header() {
               {/* Mobile social icons */}
               <div className="flex md:hidden items-center gap-1.5">
                 <a href={SOCIAL_LINKS.kick} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-emerald-400 transition-colors" aria-label="Kick">
-                  <KickIcon className="h-4 w-4" />
+                  <KickIcon className="h-5 w-5" />
                 </a>
                 <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-pink-400 transition-colors" aria-label="Instagram">
                   <Instagram className="h-4 w-4" />
@@ -140,15 +140,14 @@ export default function Header() {
                 </a>
               </div>
 
-              {/* Login/Register disabled for now — re-enable later */}
-
-              {/* Mobile toggle */}
+              {/* Menu + Login disabled for now
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="md:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors"
               >
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
+              */}
             </div>
           </div>
         </div>

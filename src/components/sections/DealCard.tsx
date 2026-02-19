@@ -233,20 +233,7 @@ export default function DealCard({
           </div>
 
           <div className="flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
-            {/* Provider badges with logos */}
-            <div className="flex items-center gap-2">
-              {deal.hasMerkur && (
-                <span className="flex items-center gap-1.5 rounded-lg bg-amber-500/10 px-2.5 py-1 ring-1 ring-amber-500/20">
-                  <img src="/images/providers/merkur.png" alt="Merkur" width={20} height={15} className="object-contain" />
-                  <span className="text-xs font-semibold text-amber-400">Merkur</span>
-                </span>
-              )}
-              {deal.hasNovoline && (
-                <span className="flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1 ring-1 ring-emerald-500/20">
-                  <img src="/images/providers/novoline.webp" alt="Novoline" width={50} height={10} className="object-contain" />
-                </span>
-              )}
-            </div>
+            {/* Merkur/Novoline badges disabled for now */}
 
             {/* CTA Button */}
             <a

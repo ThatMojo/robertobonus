@@ -112,20 +112,12 @@ export default function DealsSection() {
     return () => observer.disconnect()
   }, [])
 
-  // ── Filtered + sorted list (normal first, exclusive at the end) ──
+  // Top 10 casinos only, sorted by rank
   const filtered = useMemo(() => {
-    const list = casinos.filter((c) => {
-      if (bonusType !== "alle" && c.bonusType !== bonusType) return false
-      if (freeSpinsOnly && !c.freeSpins) return false
-      if (provider === "merkur" && !c.hasMerkur) return false
-      if (provider === "novoline" && !c.hasNovoline) return false
-      if (c.bonusPercent < minBonus) return false
-      if (showFavoritesOnly && !favoriteIds.has(c.id)) return false
-      return true
-    })
-    // Sort by rank only (exclusive feature disabled)
-    return list.sort((a, b) => a.rank - b.rank)
-  }, [bonusType, freeSpinsOnly, provider, minBonus, showFavoritesOnly, favoriteIds])
+    return casinos
+      .sort((a, b) => a.rank - b.rank)
+      .slice(0, 10)
+  }, [])
 
   return (
     <section id="deals" className="py-16">
@@ -142,55 +134,7 @@ export default function DealsSection() {
           </div>
         </AnimatedSection>
 
-        <AnimatedSection delay={0.1}>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
-            <div className="flex-1">
-              <FilterBar
-                bonusType={bonusType}
-                setBonusType={setBonusType}
-                freeSpinsOnly={freeSpinsOnly}
-                setFreeSpinsOnly={setFreeSpinsOnly}
-                provider={provider}
-                setProvider={setProvider}
-                minBonus={minBonus}
-                setMinBonus={setMinBonus}
-              />
-            </div>
-
-            {/* Favorites filter toggle — only shown when logged in */}
-            {isLoggedIn && (
-              <button
-                onClick={() => setShowFavoritesOnly((prev) => !prev)}
-                aria-pressed={showFavoritesOnly}
-                className={`
-                  flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
-                  ring-1 transition-all duration-200
-                  ${showFavoritesOnly
-                    ? "bg-purple-500/20 text-purple-300 ring-purple-400/40"
-                    : "bg-white/5 text-white/60 ring-white/10 hover:bg-white/10 hover:text-white/80"
-                  }
-                `}
-              >
-                <Heart
-                  className="h-4 w-4"
-                  fill={showFavoritesOnly ? "currentColor" : "none"}
-                  strokeWidth={2}
-                />
-                Favorites
-                {favoriteIds.size > 0 && (
-                  <span
-                    className={`
-                      ml-1 rounded-full px-1.5 py-0.5 text-xs font-bold
-                      ${showFavoritesOnly ? "bg-purple-400/30 text-purple-200" : "bg-white/10 text-white/50"}
-                    `}
-                  >
-                    {favoriteIds.size}
-                  </span>
-                )}
-              </button>
-            )}
-          </div>
-        </AnimatedSection>
+        {/* FilterBar + Favorites disabled for now */}
 
         <div className="mt-8 space-y-4">
           {filtered.slice(0, visibleCount).map((casino) => (

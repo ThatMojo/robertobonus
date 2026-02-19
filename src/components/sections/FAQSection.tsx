@@ -58,14 +58,7 @@ export default function FAQSection() {
         {/* Bottom note */}
         <AnimatedSection delay={0.3}>
           <p className="mt-8 text-center text-sm text-gray-500">
-            More questions? Write to us in the{" "}
-            <a
-              href="#"
-              className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
-            >
-              community chat
-            </a>{" "}
-            or on{" "}
+            More questions? Write to us on{" "}
             <a
               href="https://kick.com/robertovstheworld"
               target="_blank"

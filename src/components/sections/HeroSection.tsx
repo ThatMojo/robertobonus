@@ -420,14 +420,7 @@ export default function HeroSection() {
                 />
                 Discover Bonus Deals
               </m.a>
-              <span
-                style={{
-                  color: "rgba(168,85,247,0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                100% free &bull; No registration required
-              </span>
+              {/* "100% free" text disabled for now */}
             </m.div>
           </div>
         </div>
