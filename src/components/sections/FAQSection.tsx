@@ -11,7 +11,7 @@ import {
 
 export default function FAQSection() {
   return (
-    <section className="relative py-20 sm:py-24">
+    <section className="relative py-20 sm:py-24 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/5 rounded-full blur-[120px] pointer-events-none" />
 

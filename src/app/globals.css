@@ -80,6 +80,11 @@
   --sidebar-ring: #a855f7;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 html {
   scroll-behavior: smooth;
 }
