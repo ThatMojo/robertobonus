@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, Youtube, Instagram, LayoutDashboard, LogOut } from "lucide-react"
+import { Menu, X, ChevronDown, LayoutDashboard, LogOut } from "lucide-react"
 import { LazyMotion, domAnimation, m, AnimatePresence } from "framer-motion"
 import { useSession, signOut } from "next-auth/react"
 import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants"
@@ -109,30 +109,17 @@ export default function Header() {
 
             {/* Right side */}
             <div className="flex items-center gap-3">
-              {/* Desktop: Kick badge right */}
+              {/* Kick badge */}
               <a
                 href={SOCIAL_LINKS.kick}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden md:inline-flex items-center gap-2 rounded-lg bg-emerald-500/15 px-4 py-1.5 text-emerald-400 ring-1 ring-emerald-500/30 backdrop-blur-sm transition hover:bg-emerald-500/25 hover:text-emerald-300"
+                className="inline-flex items-center gap-2 rounded-lg bg-emerald-500/15 px-5 py-2 text-emerald-400 ring-1 ring-emerald-500/30 backdrop-blur-sm transition hover:bg-emerald-500/25 hover:text-emerald-300"
                 aria-label="Kick"
               >
-                <KickIcon className="h-5 w-5" />
-                <span className="text-sm font-bold">Kick</span>
+                <KickIcon className="h-6 w-6" />
+                <span className="text-base font-bold">Kick</span>
               </a>
-
-              {/* Mobile social icons */}
-              <div className="flex md:hidden items-center gap-2">
-                <a href={SOCIAL_LINKS.kick} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-emerald-400 transition-colors" aria-label="Kick">
-                  <KickIcon className="h-5 w-5" />
-                </a>
-                <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-pink-400 transition-colors" aria-label="Instagram">
-                  <Instagram className="h-4 w-4" />
-                </a>
-                <a href={SOCIAL_LINKS.youtube} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-red-400 transition-colors" aria-label="YouTube">
-                  <Youtube className="h-4 w-4" />
-                </a>
-              </div>
 
               {/* Menu + Login disabled for now
               <button
