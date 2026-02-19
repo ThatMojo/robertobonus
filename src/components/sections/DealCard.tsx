@@ -107,10 +107,12 @@ export default function DealCard({
             </div>
 
             {/* Casino logo */}
-            <div className="flex h-[80px] w-[80px] shrink-0 items-center justify-center rounded-xl bg-black/30 ring-1 ring-white/10">
-              <span className="text-3xl font-bold text-purple-400">
-                {initial}
-              </span>
+            <div className="flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/30 ring-1 ring-white/10">
+              {deal.logo && deal.logo !== "#" ? (
+                <Image src={deal.logo} alt={`${deal.name} logo`} width={80} height={80} className="h-full w-full object-contain p-1" />
+              ) : (
+                <span className="text-3xl font-bold text-purple-400">{initial}</span>
+              )}
             </div>
 
             {/* Casino name */}
