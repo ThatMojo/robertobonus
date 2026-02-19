@@ -23,7 +23,7 @@ export interface CasinoBonus {
 export const casinos: CasinoBonus[] = [
   {
     id: "gamblezen",
-    rank: 1,
+    rank: 13,
     name: "GambleZen",
     slug: "gamblezen",
     logo: "/images/casinos/gamblezen.webp",
@@ -44,7 +44,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "betflare",
-    rank: 2,
+    rank: 14,
     name: "BetFlare",
     slug: "betflare",
     logo: "/images/casinos/betflare.webp",
@@ -65,7 +65,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "lollyspins",
-    rank: 3,
+    rank: 15,
     name: "LollySpins",
     slug: "lollyspins",
     logo: "/images/casinos/lollyspins.webp",
@@ -102,8 +102,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: false,
     hasNovoline: true,
-    isExclusive: true,
-    badgeText: "Exclusive",
+    isExclusive: false,
+    badgeText: null,
   },
   {
     id: "crocoslots",
@@ -123,8 +123,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: false,
     hasNovoline: true,
-    isExclusive: true,
-    badgeText: "Exclusive",
+    isExclusive: false,
+    badgeText: null,
   },
   {
     id: "fugu-casino",
@@ -144,8 +144,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: false,
     hasNovoline: false,
-    isExclusive: true,
-    badgeText: "Exclusive",
+    isExclusive: false,
+    badgeText: null,
   },
   {
     id: "tripscasino",
@@ -165,8 +165,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: false,
     hasNovoline: true,
-    isExclusive: true,
-    badgeText: "Exclusive",
+    isExclusive: false,
+    badgeText: null,
   },
   {
     id: "wunderino",

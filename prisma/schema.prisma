@@ -45,6 +45,7 @@ model User {
   referralCode    String         @unique @default(cuid())
   referredBy      String?
   lastDailyLogin  DateTime?
+  lastCaseOpening DateTime?
   accounts        Account[]
   sessions        Session[]
   favorites       Favorite[]

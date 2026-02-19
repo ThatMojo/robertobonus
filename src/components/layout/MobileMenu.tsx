@@ -14,7 +14,7 @@ interface Props {
 export default function MobileMenu({ open, onClose }: Props) {
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-[300px] bg-[#0a0a1f]/95 backdrop-blur-xl border-l border-white/10 p-0">
+      <SheetContent side="right" className="w-[300px] bg-[#050210]/95 backdrop-blur-xl border-l border-white/10 p-0">
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="px-6 py-5 border-b border-white/10">

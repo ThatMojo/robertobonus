@@ -5,7 +5,8 @@ import DealsSection from "@/components/sections/DealsSection"
 import CommunityStats from "@/components/sections/CommunityStats"
 import MerkurInfoSection from "@/components/sections/MerkurInfoSection"
 import FAQSection from "@/components/sections/FAQSection"
-
+import MeshOrbs from "@/components/shared/MeshOrbs"
+import ParticleZone from "@/components/shared/ParticleZone"
 export const metadata = {
   title: `${SITE_NAME} | The Best Casino Bonus Offers`,
   description: SITE_DESCRIPTION,
@@ -18,12 +19,16 @@ export const metadata = {
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
-      <NewsBanner />
-      <DealsSection />
-      <CommunityStats />
-      <MerkurInfoSection />
-      <FAQSection />
+      <ParticleZone>
+        <HeroSection />
+        <NewsBanner />
+        <DealsSection />
+        <MeshOrbs>
+          <CommunityStats />
+          <MerkurInfoSection />
+          <FAQSection />
+        </MeshOrbs>
+      </ParticleZone>
     </>
   )
 }

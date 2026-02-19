@@ -47,7 +47,7 @@
 
 :root {
   --radius: 0.75rem;
-  --background: #0a0a1f;
+  --background: #050210;
   --foreground: #f0e6ff;
   --card: rgba(15, 10, 30, 0.8);
   --card-foreground: #f0e6ff;
@@ -70,7 +70,7 @@
   --chart-3: #7c3aed;
   --chart-4: #c084fc;
   --chart-5: #ddd6fe;
-  --sidebar: #0a0a1f;
+  --sidebar: #050210;
   --sidebar-foreground: #f0e6ff;
   --sidebar-primary: #a855f7;
   --sidebar-primary-foreground: #0a0a1f;
@@ -159,3 +159,74 @@ body {
   border: none;
   box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
 }
+
+/* Hero Section Animations */
+
+@keyframes rotate-ring {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    box-shadow:
+      0 0 5px rgba(168, 85, 247, 0.8),
+      0 0 15px rgba(168, 85, 247, 0.6),
+      0 0 30px rgba(168, 85, 247, 0.4),
+      0 0 60px rgba(168, 85, 247, 0.2);
+  }
+  20%, 24%, 55% {
+    box-shadow: none;
+  }
+}
+
+@keyframes mesh-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(40px, -30px) scale(1.1); }
+  50% { transform: translate(-20px, 40px) scale(0.95); }
+  75% { transform: translate(60px, 20px) scale(1.05); }
+}
+
+@keyframes mesh-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-50px, 30px) scale(0.9); }
+  50% { transform: translate(30px, -40px) scale(1.1); }
+  75% { transform: translate(-20px, -20px) scale(1.05); }
+}
+
+@keyframes mesh-drift-3 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(30px, 50px); }
+  66% { transform: translate(-40px, -30px); }
+}
+
+@keyframes burst-out {
+  0% { transform: translate(var(--tx-start), var(--ty-start)) scale(0); opacity: 1; }
+  60% { opacity: 0.8; }
+  100% { transform: translate(var(--tx-end), var(--ty-end)) scale(var(--scale-end)); opacity: 0; }
+}
+
+.rotating-ring { animation: rotate-ring 3s linear infinite; }
+.rotating-ring-reverse { animation: rotate-ring 5s linear infinite reverse; }
+.neon-flicker { animation: neon-flicker 5s infinite; }
+.mesh-1 { animation: mesh-drift-1 12s ease-in-out infinite; }
+.mesh-2 { animation: mesh-drift-2 15s ease-in-out infinite; }
+.mesh-3 { animation: mesh-drift-3 10s ease-in-out infinite; }
+.particle-burst {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity;
+  animation: burst-out var(--duration, 1s) ease-out var(--delay, 0s) forwards;
+}
+
+@keyframes neon-border-trace {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-12px) rotate(1deg); }
+  66% { transform: translateY(-6px) rotate(-1deg); }
+}
+.float-slow { animation: float-slow 6s ease-in-out infinite; }

@@ -150,7 +150,7 @@ function DashboardLayoutInner({
   const pathname = usePathname()
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a1f]">
+    <div className="flex min-h-screen bg-[#050210]">
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 border-r border-white/10 bg-[#0d0815] lg:block">
         <SidebarContent pathname={pathname} />

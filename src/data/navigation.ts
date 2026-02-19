@@ -1,4 +1,4 @@
-import { Coins, Sparkles, Flag, ChartNoAxesCombined, type LucideIcon } from "lucide-react"
+import { Coins, Sparkles, Flag, ChartNoAxesCombined, Package, ShoppingBag, ImageIcon, type LucideIcon } from "lucide-react"
 
 export interface NavItem {
   label: string
@@ -23,9 +23,11 @@ export const mainNavItems: NavItem[] = [
     icon: Sparkles,
     children: [
       { label: "Leaderboard", href: "/leaderboard", description: "Top player rankings" },
+      { label: "Win Gallery", href: "/wins", description: "Community wins" },
       { label: "Support", href: "/support", description: "Help & Contact" },
     ],
   },
-  { label: "Bonushunts", href: "/bonushunts", icon: Flag },
+  { label: "Opening", href: "/opening", icon: Package },
+  { label: "Shop", href: "/shop", icon: ShoppingBag },
   { label: "Leaderboard", href: "/leaderboard", icon: ChartNoAxesCombined },
 ]

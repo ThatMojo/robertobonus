@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import AgeVerificationModal from "@/components/AgeVerificationModal"
 import DailyBonusBanner from "@/components/shared/DailyBonusBanner"
+import ScrollToTop from "@/components/shared/ScrollToTop"
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants"
 import "./globals.css"
 
@@ -47,13 +48,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="min-h-screen bg-background text-foreground font-sans antialiased">
+      <body suppressHydrationWarning className="min-h-screen bg-background text-foreground font-sans antialiased">
         <Providers>
           <AgeVerificationModal />
           <Header />
           <main className="pt-16">{children}</main>
           <Footer />
           <DailyBonusBanner />
+          <ScrollToTop />
         </Providers>
       </body>
     </html>

@@ -89,9 +89,9 @@ export default function DealsSection() {
     }
   }, [])
 
-  // ── Filtered list ────────────────────────────────────────────────
+  // ── Filtered + sorted list (normal first, exclusive at the end) ──
   const filtered = useMemo(() => {
-    return casinos.filter((c) => {
+    const list = casinos.filter((c) => {
       if (bonusType !== "alle" && c.bonusType !== bonusType) return false
       if (freeSpinsOnly && !c.freeSpins) return false
       if (provider === "merkur" && !c.hasMerkur) return false
@@ -99,6 +99,11 @@ export default function DealsSection() {
       if (c.bonusPercent < minBonus) return false
       if (showFavoritesOnly && !favoriteIds.has(c.id)) return false
       return true
+    })
+    // Normal deals first, exclusive deals at the bottom
+    return list.sort((a, b) => {
+      if (a.isExclusive === b.isExclusive) return a.rank - b.rank
+      return a.isExclusive ? 1 : -1
     })
   }, [bonusType, freeSpinsOnly, provider, minBonus, showFavoritesOnly, favoriteIds])
 
