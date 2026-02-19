@@ -50,10 +50,10 @@ export default function AgeVerificationModal() {
               </div>
 
               <h2 className="text-xl font-bold text-white mb-2">
-                Altersverifikation
+                Age Verification
               </h2>
               <p className="text-sm text-white/50 mb-6">
-                {SITE_NAME} richtet sich ausschließlich an Personen ab 18 Jahren. Bitte bestätige dein Alter, um fortzufahren.
+                {SITE_NAME} is intended for persons aged 18 and over only. Please confirm your age to continue.
               </p>
 
               <div className="flex gap-3">
@@ -61,20 +61,20 @@ export default function AgeVerificationModal() {
                   onClick={handleDeny}
                   className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white/60 hover:bg-white/10 hover:text-white/80 transition-all"
                 >
-                  Unter 18
+                  Under 18
                 </button>
                 <button
                   onClick={handleConfirm}
                   className="flex-1 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all"
                 >
-                  Ich bin 18+
+                  I am 18+
                 </button>
               </div>
 
               <div className="mt-5 flex items-start gap-2 rounded-lg bg-yellow-500/5 border border-yellow-500/10 p-3">
                 <AlertTriangle className="h-4 w-4 text-yellow-500/60 mt-0.5 shrink-0" />
                 <p className="text-xs text-white/30 text-left">
-                  Glücksspiel kann süchtig machen. Hilfe: BZgA 0800 1 37 27 00
+                  Gambling can be addictive. For help visit www.begambleaware.org
                 </p>
               </div>
             </m.div>

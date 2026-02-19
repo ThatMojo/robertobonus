@@ -9,7 +9,7 @@ import {
   useInView,
   useReducedMotion,
 } from "framer-motion"
-import { Star, Sparkles, Zap, Gift } from "lucide-react"
+import { Star, Sparkles, Zap, Gift, Youtube, Instagram } from "lucide-react"
 import { AVATAR_URL, STREAMER_NAME } from "@/lib/constants"
 
 const features = [
@@ -420,7 +420,14 @@ export default function HeroSection() {
                 />
                 Discover Bonus Deals
               </m.a>
-              {/* "100% free" text disabled for now */}
+              <div className="flex items-center gap-4">
+                <a href="https://www.youtube.com/@RobertoVsTheWorld" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-red-400 transition-colors" aria-label="YouTube">
+                  <Youtube className="h-5 w-5" />
+                </a>
+                <a href="https://www.instagram.com/robertovstheworld/" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-pink-400 transition-colors" aria-label="Instagram">
+                  <Instagram className="h-5 w-5" />
+                </a>
+              </div>
             </m.div>
           </div>
         </div>

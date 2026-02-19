@@ -53,25 +53,7 @@ export default function Header() {
                 {SITE_NAME}
               </Link>
 
-              {/* Kick badge + Social Icons (Desktop) */}
-              <div className="ml-2 hidden md:flex items-center gap-2">
-                <a
-                  href={SOCIAL_LINKS.kick}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/15 px-2 py-[3px] text-emerald-400 ring-1 ring-emerald-500/30 backdrop-blur-sm transition hover:bg-emerald-500/25 hover:text-emerald-300"
-                  aria-label="Kick"
-                >
-                  <KickIcon className="h-3.5 w-3.5" />
-                  <span className="text-xs font-semibold">Kick</span>
-                </a>
-                <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-pink-400 transition-colors" aria-label="Instagram">
-                  <Instagram className="h-4 w-4" />
-                </a>
-                <a href={SOCIAL_LINKS.youtube} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-red-400 transition-colors" aria-label="YouTube">
-                  <Youtube className="h-4 w-4" />
-                </a>
-              </div>
+              {/* Kick badge moved to right side */}
             </div>
 
             {/* Desktop Nav — disabled for now */}
@@ -126,9 +108,21 @@ export default function Header() {
             </nav>
 
             {/* Right side */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {/* Desktop: Kick badge right */}
+              <a
+                href={SOCIAL_LINKS.kick}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden md:inline-flex items-center gap-2 rounded-lg bg-emerald-500/15 px-4 py-1.5 text-emerald-400 ring-1 ring-emerald-500/30 backdrop-blur-sm transition hover:bg-emerald-500/25 hover:text-emerald-300"
+                aria-label="Kick"
+              >
+                <KickIcon className="h-5 w-5" />
+                <span className="text-sm font-bold">Kick</span>
+              </a>
+
               {/* Mobile social icons */}
-              <div className="flex md:hidden items-center gap-1.5">
+              <div className="flex md:hidden items-center gap-2">
                 <a href={SOCIAL_LINKS.kick} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-emerald-400 transition-colors" aria-label="Kick">
                   <KickIcon className="h-5 w-5" />
                 </a>
