@@ -86,7 +86,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "bitkingz",
-    rank: 4,
+    rank: 1,
     name: "Bitkingz",
     slug: "bitkingz",
     logo: "/images/casinos/bitkingz.webp",
@@ -107,7 +107,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "crocoslots",
-    rank: 5,
+    rank: 2,
     name: "Crocoslots",
     slug: "crocoslots",
     logo: "/images/casinos/crocoslots.webp",
@@ -128,7 +128,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "fugu-casino",
-    rank: 6,
+    rank: 3,
     name: "Fugu Casino",
     slug: "fugu-casino",
     logo: "/images/casinos/fugu-casino.webp",
@@ -149,7 +149,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "tripscasino",
-    rank: 7,
+    rank: 4,
     name: "Tripscasino",
     slug: "tripscasino",
     logo: "/images/casinos/tripscasino.webp",
@@ -170,7 +170,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "wunderino",
-    rank: 8,
+    rank: 5,
     name: "Wunderino",
     slug: "wunderino",
     logo: "/images/casinos/wunderino.webp",
@@ -191,7 +191,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "stake",
-    rank: 9,
+    rank: 6,
     name: "Stake",
     slug: "stake",
     logo: "/images/casinos/stake.webp",
@@ -212,7 +212,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "vulkan-vegas",
-    rank: 10,
+    rank: 7,
     name: "Vulkan Vegas",
     slug: "vulkan-vegas",
     logo: "/images/casinos/vulkan-vegas.webp",
@@ -233,7 +233,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "ice-casino",
-    rank: 11,
+    rank: 8,
     name: "Ice Casino",
     slug: "ice-casino",
     logo: "/images/casinos/ice-casino.webp",
@@ -254,7 +254,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "playfortuna",
-    rank: 12,
+    rank: 9,
     name: "PlayFortuna",
     slug: "playfortuna",
     logo: "/images/casinos/playfortuna.webp",
@@ -275,7 +275,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "national-casino",
-    rank: 13,
+    rank: 10,
     name: "National Casino",
     slug: "national-casino",
     logo: "/images/casinos/national-casino.webp",
@@ -296,7 +296,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "20bet",
-    rank: 14,
+    rank: 11,
     name: "20Bet",
     slug: "20bet",
     logo: "/images/casinos/20bet.webp",
@@ -317,7 +317,7 @@ export const casinos: CasinoBonus[] = [
   },
   {
     id: "mystake",
-    rank: 15,
+    rank: 12,
     name: "MyStake",
     slug: "mystake",
     logo: "/images/casinos/mystake.webp",
