@@ -422,10 +422,10 @@ export default function HeroSection() {
               </m.a>
               <div className="flex items-center gap-4">
                 <a href="https://www.youtube.com/@RobertoVsTheWorld" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-red-400 transition-colors" aria-label="YouTube">
-                  <Youtube className="h-5 w-5" />
+                  <Youtube className="h-7 w-7" />
                 </a>
                 <a href="https://www.instagram.com/robertovstheworld/" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-pink-400 transition-colors" aria-label="Instagram">
-                  <Instagram className="h-5 w-5" />
+                  <Instagram className="h-7 w-7" />
                 </a>
               </div>
             </m.div>
