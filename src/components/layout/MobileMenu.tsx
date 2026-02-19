@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
-import { Twitch, Youtube, Instagram } from "lucide-react"
+import { Youtube, Instagram } from "lucide-react"
 import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants"
+import KickIcon from "@/components/icons/KickIcon"
 import { mainNavItems } from "@/data/navigation"
 
 interface Props {
@@ -59,8 +60,8 @@ export default function MobileMenu({ open, onClose }: Props) {
               Login
             </Link>
             <div className="flex items-center justify-center gap-4">
-              <a href={SOCIAL_LINKS.twitch} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-purple-400 transition-colors">
-                <Twitch className="h-5 w-5" />
+              <a href={SOCIAL_LINKS.kick} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-emerald-400 transition-colors">
+                <KickIcon className="h-5 w-5" />
               </a>
               <a href={SOCIAL_LINKS.youtube} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-red-400 transition-colors">
                 <Youtube className="h-5 w-5" />

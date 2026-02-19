@@ -19,24 +19,28 @@ function FixedParticles() {
       background: { color: { value: "transparent" } },
       fpsLimit: 30,
       particles: {
-        color: { value: ["#a855f7", "#7c3aed", "#c084fc", "#8b5cf6"] },
-        links: {
-          color: "#a855f7",
-          distance: 120,
-          enable: true,
-          opacity: 0.15,
-          width: 1,
+        shape: {
+          type: "image" as const,
+          options: {
+            image: [
+              { src: "/images/chips/chip-gold.svg", width: 64, height: 64 },
+            ],
+          },
         },
         move: {
           enable: true,
-          speed: 1.5,
+          speed: 0.5,
           direction: "none" as const,
           random: true,
           outModes: { default: "bounce" as const },
         },
-        number: { density: { enable: false }, value: 70 },
-        opacity: { value: { min: 0.12, max: 0.35 } },
-        size: { value: { min: 1, max: 5 } },
+        number: { density: { enable: false }, value: 8 },
+        opacity: { value: { min: 0.15, max: 0.35 } },
+        size: { value: { min: 16, max: 32 } },
+        rotate: {
+          value: { min: 0, max: 360 },
+          animation: { enable: true, speed: 2, sync: false },
+        },
       },
       detectRetina: true,
     }),

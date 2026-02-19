@@ -1,6 +1,7 @@
 import Link from "next/link"
-import { Twitch, Youtube, Instagram, Heart } from "lucide-react"
+import { Youtube, Instagram, Heart } from "lucide-react"
 import { SITE_NAME, SOCIAL_LINKS, STREAMER_NAME } from "@/lib/constants"
+import KickIcon from "@/components/icons/KickIcon"
 
 const footerLinks = {
   casino: [
@@ -21,7 +22,7 @@ const footerLinks = {
 }
 
 const socialLinks = [
-  { icon: Twitch, href: SOCIAL_LINKS.twitch, label: "Twitch", hoverColor: "hover:text-purple-400" },
+  { icon: KickIcon, href: SOCIAL_LINKS.kick, label: "Kick", hoverColor: "hover:text-emerald-400" },
   { icon: Youtube, href: SOCIAL_LINKS.youtube, label: "YouTube", hoverColor: "hover:text-red-400" },
   { icon: Instagram, href: SOCIAL_LINKS.instagram, label: "Instagram", hoverColor: "hover:text-pink-400" },
 ]

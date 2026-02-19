@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, Twitch, LayoutDashboard, LogOut } from "lucide-react"
+import { Menu, X, ChevronDown, Youtube, Instagram, LayoutDashboard, LogOut } from "lucide-react"
 import { LazyMotion, domAnimation, m, AnimatePresence } from "framer-motion"
 import { useSession, signOut } from "next-auth/react"
 import { SITE_NAME, SOCIAL_LINKS } from "@/lib/constants"
@@ -11,38 +11,7 @@ import { mainNavItems } from "@/data/navigation"
 import { cn } from "@/lib/utils"
 import MobileMenu from "./MobileMenu"
 import NotificationBell from "@/components/shared/NotificationBell"
-
-function useTwitchLive() {
-  const [live, setLive] = useState(false)
-  const [viewers, setViewers] = useState(0)
-
-  useEffect(() => {
-    let mounted = true
-
-    async function check() {
-      try {
-        const res = await fetch("/api/twitch/live")
-        if (!res.ok) return
-        const data = await res.json()
-        if (mounted) {
-          setLive(data.live)
-          setViewers(data.viewers ?? 0)
-        }
-      } catch {
-        // silently fail
-      }
-    }
-
-    check()
-    const interval = setInterval(check, 60_000)
-    return () => {
-      mounted = false
-      clearInterval(interval)
-    }
-  }, [])
-
-  return { live, viewers }
-}
+import KickIcon from "@/components/icons/KickIcon"
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
@@ -51,7 +20,6 @@ export default function Header() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const isAdmin = session?.user?.role === "ADMIN"
-  const { live } = useTwitchLive()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -76,7 +44,7 @@ export default function Header() {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-16 items-center justify-between">
-            {/* Left: Logo + Twitch */}
+            {/* Left: Logo + Kick */}
             <div className="flex items-center">
               <Link
                 href="/"
@@ -85,30 +53,25 @@ export default function Header() {
                 {SITE_NAME}
               </Link>
 
-              {/* Twitch Live Indicator */}
-              <a
-                href={SOCIAL_LINKS.twitch}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "ml-2 inline-flex items-center gap-1.5 rounded-md px-2 py-[3px] text-xs font-semibold ring-1 backdrop-blur-sm transition",
-                  live
-                    ? "bg-emerald-500/15 text-emerald-400 ring-emerald-500/30 hover:bg-emerald-500/25"
-                    : "bg-black/30 text-zinc-400 ring-white/5 hover:bg-black/40 hover:text-zinc-300"
-                )}
-                aria-label={live ? "Twitch live" : "Twitch offline"}
-              >
-                {live ? (
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                  </span>
-                ) : (
-                  <span className="h-2 w-2 rounded-full bg-zinc-600 shadow-inner" />
-                )}
-                <Twitch className={cn("h-3.5 w-3.5", live ? "text-emerald-400" : "text-zinc-400")} />
-                <span className="hidden sm:inline">{live ? "Live" : "Offline"}</span>
-              </a>
+              {/* Kick badge + Social Icons (Desktop) */}
+              <div className="ml-2 hidden md:flex items-center gap-2">
+                <a
+                  href={SOCIAL_LINKS.kick}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/15 px-2 py-[3px] text-emerald-400 ring-1 ring-emerald-500/30 backdrop-blur-sm transition hover:bg-emerald-500/25 hover:text-emerald-300"
+                  aria-label="Kick"
+                >
+                  <KickIcon className="h-3.5 w-3.5" />
+                  <span className="text-xs font-semibold">Kick</span>
+                </a>
+                <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-pink-400 transition-colors" aria-label="Instagram">
+                  <Instagram className="h-4 w-4" />
+                </a>
+                <a href={SOCIAL_LINKS.youtube} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-red-400 transition-colors" aria-label="YouTube">
+                  <Youtube className="h-4 w-4" />
+                </a>
+              </div>
             </div>
 
             {/* Desktop Nav */}
@@ -164,6 +127,19 @@ export default function Header() {
 
             {/* Right side */}
             <div className="flex items-center gap-2">
+              {/* Mobile social icons */}
+              <div className="flex md:hidden items-center gap-1.5">
+                <a href={SOCIAL_LINKS.kick} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-emerald-400 transition-colors" aria-label="Kick">
+                  <KickIcon className="h-4 w-4" />
+                </a>
+                <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-pink-400 transition-colors" aria-label="Instagram">
+                  <Instagram className="h-4 w-4" />
+                </a>
+                <a href={SOCIAL_LINKS.youtube} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-red-400 transition-colors" aria-label="YouTube">
+                  <Youtube className="h-4 w-4" />
+                </a>
+              </div>
+
               {session ? (
                 <div className="hidden sm:flex items-center gap-2">
                   <NotificationBell />

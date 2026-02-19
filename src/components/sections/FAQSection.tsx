@@ -67,12 +67,12 @@ export default function FAQSection() {
             </a>{" "}
             or on{" "}
             <a
-              href="https://www.twitch.tv/robertovstheworld"
+              href="https://kick.com/robertovstheworld"
               target="_blank"
               rel="noopener noreferrer"
               className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
             >
-              Twitch
+              Kick
             </a>
             .
           </p>

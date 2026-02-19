@@ -4,7 +4,6 @@ import {
   HelpCircle,
   MessageCircle,
   Send,
-  Twitch,
   Youtube,
   Instagram,
 } from "lucide-react"
@@ -25,12 +24,12 @@ import { Label } from "@/components/ui/label"
 
 const contactChannels = [
   {
-    name: "Twitch",
+    name: "Kick",
     description: `Live chat on the ${STREAMER_NAME} channel`,
-    href: SOCIAL_LINKS.twitch,
-    icon: Twitch,
-    color: "text-purple-400 hover:text-purple-300",
-    bgHover: "hover:border-purple-500/30",
+    href: SOCIAL_LINKS.kick,
+    icon: Send,
+    color: "text-emerald-400 hover:text-emerald-300",
+    bgHover: "hover:border-emerald-500/30",
   },
   {
     name: "YouTube",
@@ -224,12 +223,12 @@ export default function SupportContent() {
             We typically respond within 24 hours. For quick help, we recommend
             the{" "}
             <a
-              href={SOCIAL_LINKS.twitch}
+              href={SOCIAL_LINKS.kick}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
+              className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2 transition-colors"
             >
-              Twitch Live Chat
+              Kick Live Chat
             </a>
             .
           </p>

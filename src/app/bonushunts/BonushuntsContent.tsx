@@ -29,12 +29,12 @@ export default function BonushuntsContent() {
         </a>
         {" "} | Watch live on{" "}
         <a
-          href={SOCIAL_LINKS.twitch}
+          href={SOCIAL_LINKS.kick}
           target="_blank"
           rel="noopener noreferrer"
           className="text-purple-400 hover:text-purple-300 transition-colors"
         >
-          Twitch
+          Kick
         </a>
       </div>
     </div>
