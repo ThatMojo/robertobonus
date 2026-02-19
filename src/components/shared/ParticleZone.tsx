@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, type ReactNode } from "react"
 import Particles, { initParticlesEngine } from "@tsparticles/react"
 import { loadSlim } from "@tsparticles/slim"
 
-function IntenseParticles() {
+function FixedParticles() {
   const [init, setInit] = useState(false)
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function IntenseParticles() {
     () => ({
       fullScreen: false as const,
       background: { color: { value: "transparent" } },
-      fpsLimit: 60,
+      fpsLimit: 30,
       particles: {
         color: { value: ["#a855f7", "#7c3aed", "#c084fc", "#8b5cf6"] },
         links: {
@@ -34,9 +34,9 @@ function IntenseParticles() {
           random: true,
           outModes: { default: "bounce" as const },
         },
-        number: { density: { enable: true }, value: 60 },
-        opacity: { value: { min: 0.08, max: 0.3 } },
-        size: { value: { min: 1, max: 5 } },
+        number: { density: { enable: true }, value: 70 },
+        opacity: { value: { min: 0.08, max: 0.25 } },
+        size: { value: { min: 1, max: 4 } },
       },
       detectRetina: true,
     }),
@@ -48,8 +48,8 @@ function IntenseParticles() {
   return (
     <Particles
       id="tsparticles-zone"
-      className="absolute inset-0 pointer-events-none"
-      style={{ zIndex: 1 }}
+      className="!fixed inset-0 pointer-events-none"
+      style={{ zIndex: 0 }}
       options={options}
     />
   )
@@ -57,11 +57,9 @@ function IntenseParticles() {
 
 export default function ParticleZone({ children }: { children: ReactNode }) {
   return (
-    <div className="relative">
-      <IntenseParticles />
-      <div className="relative" style={{ zIndex: 2 }}>
-        {children}
-      </div>
+    <div className="relative" style={{ zIndex: 1 }}>
+      <FixedParticles />
+      {children}
     </div>
   )
 }

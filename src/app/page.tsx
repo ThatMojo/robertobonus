@@ -18,17 +18,15 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <>
-      <ParticleZone>
-        <HeroSection />
-        <NewsBanner />
-        <DealsSection />
-        <MeshOrbs>
-          <CommunityStats />
-          <MerkurInfoSection />
-          <FAQSection />
-        </MeshOrbs>
-      </ParticleZone>
-    </>
+    <ParticleZone>
+      <HeroSection />
+      <NewsBanner />
+      <DealsSection />
+      <MeshOrbs>
+        <CommunityStats />
+        <MerkurInfoSection />
+        <FAQSection />
+      </MeshOrbs>
+    </ParticleZone>
   )
 }

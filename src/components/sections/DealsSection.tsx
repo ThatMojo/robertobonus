@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect, useCallback } from "react"
+import { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { Heart } from "lucide-react"
 import { casinos } from "@/data/casinos"
@@ -18,6 +18,8 @@ export default function DealsSection() {
   const [provider, setProvider] = useState("alle")
   const [minBonus, setMinBonus] = useState(100)
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(10)
+  const loadMoreRef = useRef<HTMLDivElement>(null)
 
   // ── Favorites state ─────────────────────────────────────────────
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set())
@@ -87,6 +89,27 @@ export default function DealsSection() {
         return next
       })
     }
+  }, [])
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(10)
+  }, [bonusType, freeSpinsOnly, provider, minBonus, showFavoritesOnly])
+
+  // Infinite scroll — load 5 more when sentinel enters viewport
+  useEffect(() => {
+    const el = loadMoreRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleCount((prev) => prev + 5)
+        }
+      },
+      { rootMargin: "200px" }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
   }, [])
 
   // ── Filtered + sorted list (normal first, exclusive at the end) ──
@@ -173,8 +196,8 @@ export default function DealsSection() {
         </AnimatedSection>
 
         <div className="mt-8 space-y-4">
-          {filtered.map((casino, i) => (
-            <AnimatedSection key={casino.id} delay={0.05 * Math.min(i, 5)}>
+          {filtered.slice(0, visibleCount).map((casino) => (
+            <AnimatedSection key={casino.id} delay={0}>
               <DealCard
                 deal={casino}
                 isFavorited={favoriteIds.has(casino.id)}
@@ -194,6 +217,13 @@ export default function DealsSection() {
                   ? "Click the heart on any deal to save it here"
                   : "Try different filter settings"}
               </p>
+            </div>
+          )}
+
+          {/* Infinite scroll sentinel */}
+          {filtered.length > visibleCount && (
+            <div ref={loadMoreRef} className="flex justify-center py-8">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-purple-400/30 border-t-purple-400" />
             </div>
           )}
         </div>

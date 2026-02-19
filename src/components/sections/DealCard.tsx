@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { Heart, Lock } from "lucide-react"
 import { CasinoBonus } from "@/data/casinos"
 
@@ -109,7 +108,7 @@ export default function DealCard({
             {/* Casino logo */}
             <div className="flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/30 ring-1 ring-white/10">
               {deal.logo && deal.logo !== "#" ? (
-                <Image src={deal.logo} alt={`${deal.name} logo`} width={80} height={80} className="h-full w-full object-contain p-1" />
+                <img src={deal.logo} alt={`${deal.name} logo`} width={80} height={80} loading="lazy" className="h-full w-full object-contain p-1" />
               ) : (
                 <span className="text-3xl font-bold text-purple-400">{initial}</span>
               )}
@@ -238,13 +237,13 @@ export default function DealCard({
             <div className="flex items-center gap-2">
               {deal.hasMerkur && (
                 <span className="flex items-center gap-1.5 rounded-lg bg-amber-500/10 px-2.5 py-1 ring-1 ring-amber-500/20">
-                  <Image src="/images/providers/merkur.png" alt="Merkur" width={20} height={15} className="object-contain" />
+                  <img src="/images/providers/merkur.png" alt="Merkur" width={20} height={15} className="object-contain" />
                   <span className="text-xs font-semibold text-amber-400">Merkur</span>
                 </span>
               )}
               {deal.hasNovoline && (
                 <span className="flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1 ring-1 ring-emerald-500/20">
-                  <Image src="/images/providers/novoline.webp" alt="Novoline" width={50} height={10} className="object-contain" />
+                  <img src="/images/providers/novoline.webp" alt="Novoline" width={50} height={10} className="object-contain" />
                 </span>
               )}
             </div>

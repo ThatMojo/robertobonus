@@ -260,6 +260,7 @@ export default function HeroSection() {
                 alt={`${STREAMER_NAME} Avatar`}
                 width={160}
                 height={160}
+                unoptimized
                 className="relative rounded-full object-cover ring-4 ring-purple-500/60"
                 style={{
                   boxShadow:
