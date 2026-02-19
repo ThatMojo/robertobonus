@@ -39,8 +39,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: true,
     hasNovoline: true,
-    isExclusive: true,
-    badgeText: "Exclusive",
+    isExclusive: false,
+    badgeText: null,
   },
   {
     id: "windetta",
@@ -60,7 +60,7 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: true,
     hasNovoline: true,
-    isExclusive: true,
+    isExclusive: false,
     badgeText: "New",
   },
   {
@@ -81,8 +81,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: true,
     hasNovoline: true,
-    isExclusive: true,
-    badgeText: "Exclusive",
+    isExclusive: false,
+    badgeText: null,
   },
   {
     id: "lollyspins",
@@ -711,8 +711,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: false,
     hasNovoline: true,
-    isExclusive: false,
-    badgeText: null,
+    isExclusive: true,
+    badgeText: "Exclusive",
   },
   {
     id: "ice-casino",
@@ -732,8 +732,8 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: false,
     hasNovoline: true,
-    isExclusive: false,
-    badgeText: null,
+    isExclusive: true,
+    badgeText: "Exclusive",
   },
   {
     id: "vulkanvegas-casino",
@@ -753,7 +753,7 @@ export const casinos: CasinoBonus[] = [
     affiliateUrl: "#",
     hasMerkur: false,
     hasNovoline: true,
-    isExclusive: false,
-    badgeText: null,
+    isExclusive: true,
+    badgeText: "Exclusive",
   },
 ]
