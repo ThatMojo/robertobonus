@@ -140,42 +140,7 @@ export default function Header() {
                 </a>
               </div>
 
-              {session ? (
-                <div className="hidden sm:flex items-center gap-2">
-                  <NotificationBell />
-                  {isAdmin && (
-                    <Link
-                      href="/dashboard"
-                      className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-black/30 px-3 py-1.5 text-xs font-medium text-white/80 transition hover:bg-white/5 hover:text-white"
-                    >
-                      <LayoutDashboard className="h-3.5 w-3.5" />
-                      Dashboard
-                    </Link>
-                  )}
-                  <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-black/30 px-3 py-1.5 text-xs font-medium text-white/80 transition hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                  >
-                    <LogOut className="h-3.5 w-3.5" />
-                    Logout
-                  </button>
-                </div>
-              ) : (
-                <div className="hidden sm:flex items-center gap-2">
-                  <Link
-                    href="/login"
-                    className="inline-flex items-center gap-2 rounded-md border border-purple-400/40 bg-black/40 px-3 py-1.5 text-xs font-medium text-purple-100 shadow-sm transition hover:border-purple-400 hover:bg-purple-500/10 hover:text-white"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 px-3 py-1.5 text-xs font-semibold text-black shadow-[0_0_18px_rgba(168,85,247,0.35)] ring-1 ring-purple-400/40 transition hover:-translate-y-0.5 hover:shadow-[0_0_26px_rgba(168,85,247,0.6)] active:translate-y-px"
-                  >
-                    Register
-                  </Link>
-                </div>
-              )}
+              {/* Login/Register disabled for now — re-enable later */}
 
               {/* Mobile toggle */}
               <button

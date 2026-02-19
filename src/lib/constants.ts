@@ -8,6 +8,6 @@ export const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/robertovstheworld/",
 } as const
 
-export const AVATAR_URL = "https://yt3.googleusercontent.com/ANfSC1l6OsDBDwHUkNupA9dRJh3l6z3BEJphqKX6MUbarRqppcfKxV5OzIwzb0E5VWhM-VcvrQ=s900-c-k-c0x00ffffff-no-rj"
+export const AVATAR_URL = "/images/roberto-avatar.jpg"
 
-export const STREAMER_NAME = "RobertoVsTheWorld"
+export const STREAMER_NAME = "ROBERTO"

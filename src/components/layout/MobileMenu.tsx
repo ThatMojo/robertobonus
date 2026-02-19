@@ -52,13 +52,7 @@ export default function MobileMenu({ open, onClose }: Props) {
 
           {/* Bottom */}
           <div className="px-6 py-4 border-t border-white/10 space-y-4">
-            <Link
-              href="/login"
-              onClick={onClose}
-              className="block w-full text-center rounded-lg bg-gradient-to-r from-purple-600 to-purple-500 px-4 py-2.5 text-sm font-semibold text-white"
-            >
-              Login
-            </Link>
+            {/* Login disabled for now */}
             <div className="flex items-center justify-center gap-4">
               <a href={SOCIAL_LINKS.kick} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-emerald-400 transition-colors">
                 <KickIcon className="h-5 w-5" />

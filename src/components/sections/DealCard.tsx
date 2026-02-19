@@ -40,8 +40,8 @@ export default function DealCard({
     onToggleFavorite?.(deal.id)
   }
 
-  // Exclusive + not logged in → show locked overlay
-  const showExclusiveOverlay = deal.isExclusive && !isLoggedIn
+  // Exclusive feature disabled for now
+  const showExclusiveOverlay = false
 
   return (
     <article

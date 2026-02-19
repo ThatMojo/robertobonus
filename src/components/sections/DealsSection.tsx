@@ -123,11 +123,8 @@ export default function DealsSection() {
       if (showFavoritesOnly && !favoriteIds.has(c.id)) return false
       return true
     })
-    // Normal deals first, exclusive deals at the bottom
-    return list.sort((a, b) => {
-      if (a.isExclusive === b.isExclusive) return a.rank - b.rank
-      return a.isExclusive ? 1 : -1
-    })
+    // Sort by rank only (exclusive feature disabled)
+    return list.sort((a, b) => a.rank - b.rank)
   }, [bonusType, freeSpinsOnly, provider, minBonus, showFavoritesOnly, favoriteIds])
 
   return (
