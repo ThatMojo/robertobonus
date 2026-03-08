@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Heart, Lock } from "lucide-react"
+import { Heart, Lock, Check } from "lucide-react"
 import { CasinoBonus } from "@/data/casinos"
 
 interface DealCardProps {
@@ -22,6 +22,7 @@ export default function DealCard({
   // Local optimistic state so the heart reacts instantly
   const [localFavorited, setLocalFavorited] = useState(isFavorited)
   const [showLoginHint, setShowLoginHint] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   // Keep in sync when the parent updates the prop (e.g. after API response)
   // We use a simple derived value: parent prop wins if it changes
@@ -106,7 +107,7 @@ export default function DealCard({
             </div>
 
             {/* Casino logo */}
-            <div className="flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/30 ring-1 ring-white/10">
+            <div className={`flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-xl ring-1 ring-white/10 ${deal.slug === "stake" ? "bg-white" : "bg-black/30"}`}>
               {deal.logo && deal.logo !== "#" ? (
                 <img src={deal.logo} alt={`${deal.name} logo`} width={80} height={80} loading="lazy" className="h-full w-full object-contain p-1" />
               ) : (
@@ -205,22 +206,42 @@ export default function DealCard({
                 </p>
               </div>
               {deal.promoCode && (
-                <button
-                  onClick={() => navigator.clipboard.writeText(deal.promoCode!)}
-                  className="shrink-0 rounded-lg bg-white/5 p-1.5 text-white/40 transition-colors hover:bg-white/10 hover:text-white"
-                  title="Copy Code"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+                <div className="relative">
+                  {copied && (
+                    <div className="absolute -top-9 right-0 whitespace-nowrap rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white shadow-lg animate-in fade-in zoom-in-95 duration-200">
+                      Copied!
+                      <span className="absolute -bottom-1 right-3 h-2 w-2 rotate-45 bg-emerald-600" />
+                    </div>
+                  )}
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(deal.promoCode!)
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
+                    }}
+                    className={`shrink-0 rounded-lg p-1.5 transition-all duration-200 ${
+                      copied
+                        ? "bg-emerald-500/20 text-emerald-400 scale-110"
+                        : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                    }`}
+                    title="Copy Code"
                   >
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                  </svg>
-                </button>
+                    {copied ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -241,7 +262,7 @@ export default function DealCard({
               target="_blank"
               rel="noopener noreferrer nofollow"
               className="group/btn relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-purple-400 via-purple-300 to-violet-200 px-6 py-2.5 font-extrabold tracking-wide text-black shadow-[0_0_22px_rgba(168,85,247,0.35)] ring-1 ring-purple-400/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(168,85,247,0.55)] active:translate-y-px active:scale-[0.98] sm:w-auto sm:shrink-0"
-              aria-label={`Zum Deal – ${deal.name}`}
+              aria-label={`Go to deal – ${deal.name}`}
             >
               <span className="relative z-10 flex items-center gap-2 text-black transition-transform duration-300 group-hover/btn:scale-[1.03]">
                 Play Now

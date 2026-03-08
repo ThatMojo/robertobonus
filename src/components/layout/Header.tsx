@@ -56,8 +56,8 @@ export default function Header() {
               {/* Kick badge moved to right side */}
             </div>
 
-            {/* Desktop Nav — disabled for now */}
-            <nav className="hidden items-center gap-1">
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-1">
               {mainNavItems.map((item) => (
                 <div
                   key={item.label}
@@ -121,14 +121,12 @@ export default function Header() {
                 <span className="text-base font-bold">Kick</span>
               </a>
 
-              {/* Menu + Login disabled for now
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="md:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors"
               >
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
-              */}
             </div>
           </div>
         </div>

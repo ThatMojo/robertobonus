@@ -1,4 +1,4 @@
-import { Coins, type LucideIcon } from "lucide-react"
+import { Coins, Shield, HelpCircle, type LucideIcon } from "lucide-react"
 
 export interface NavItem {
   label: string
@@ -9,9 +9,19 @@ export interface NavItem {
 
 export const mainNavItems: NavItem[] = [
   {
-    label: "Casino",
+    label: "Casinos",
     href: "#deals",
     icon: Coins,
+  },
+  {
+    label: "Providers",
+    href: "#providers",
+    icon: Shield,
+  },
+  {
+    label: "FAQ",
+    href: "#faq",
+    icon: HelpCircle,
   },
 ]
 

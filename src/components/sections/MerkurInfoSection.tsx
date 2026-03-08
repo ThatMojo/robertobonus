@@ -13,7 +13,7 @@ const features = [
 
 export default function MerkurInfoSection() {
   return (
-    <section className="relative py-20 sm:py-24 overflow-hidden">
+    <section id="providers" className="relative py-20 sm:py-24 overflow-hidden">
       {/* Ambient glows */}
       <div className="absolute top-1/3 right-0 w-96 h-96 bg-purple-600/8 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-violet-500/6 rounded-full blur-[100px] pointer-events-none" />
