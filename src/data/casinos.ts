@@ -14,6 +14,7 @@ export interface CasinoBonus {
   features: string[]
   promoCode: string | null
   affiliateUrl: string
+  currency?: "EUR" | "USD"
   hasMerkur: boolean
   hasNovoline: boolean
   isExclusive: boolean
@@ -29,14 +30,15 @@ export const casinos: CasinoBonus[] = [
     logo: "/images/casinos/stake.png",
     bonusPercent: 200,
     bonusType: "non-sticky",
-    maxBonus: 0,
-    maxBet: 5,
+    maxBonus: 1000,
+    maxBet: 1000,
     freeSpins: null,
     wagerMultiplier: 40,
     wagerType: "Bonus Only",
-    features: ["200% Bonus", "Non-Sticky", "Promo Code STRONG"],
-    promoCode: "STRONG",
-    affiliateUrl: "#",
+    features: ["200% Bonus", "Non-Sticky", "Promo Code ROBERTO", "Max Bet $1,000"],
+    promoCode: "ROBERTO",
+    affiliateUrl: "http://stake.com/?offer=roberto",
+    currency: "EUR",
     hasMerkur: false,
     hasNovoline: false,
     isExclusive: false,

@@ -18,6 +18,7 @@ export default function DealCard({
   isLoggedIn = false,
 }: DealCardProps) {
   const initial = deal.name.charAt(0).toUpperCase()
+  const currencySymbol = deal.currency === "USD" ? "$" : "€"
 
   // Local optimistic state so the heart reacts instantly
   const [localFavorited, setLocalFavorited] = useState(isFavorited)
@@ -154,7 +155,7 @@ export default function DealCard({
             <li className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
               <span className="block text-xs text-white/60">Max Bonus</span>
               <span className="mt-0.5 block text-lg font-semibold">
-                {deal.maxBonus.toLocaleString("de-DE")}&euro;
+                {currencySymbol}{deal.maxBonus.toLocaleString("de-DE")}
               </span>
             </li>
 
@@ -162,7 +163,7 @@ export default function DealCard({
             <li className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
               <span className="block text-xs text-white/60">Max Bet</span>
               <span className="mt-0.5 block text-lg font-semibold">
-                {deal.maxBet}&euro;
+                {currencySymbol}{deal.maxBet.toLocaleString("de-DE")}
               </span>
             </li>
 
